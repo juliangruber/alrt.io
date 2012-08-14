@@ -3,69 +3,52 @@ extends layout
 block content
   h1#title= title
   p#time
-  script
-    var SECOND = 1000;
-    var MINUTE = SECOND*60;
-    var HOUR = MINUTE*60;
-    
-    var path = decodeURI(document.location.pathname);
-    var dateStr = path.substr(1, path.length);
-    
-    var duration = getMiliseconds(parseDate(dateStr));
-    var toGo = parseInt(duration, 10);
-        
-    (function tick() {
-      document.getElementById('time').innerHTML = formatDate(toGo);
-      toGo -= 100;
-      window.setTimeout(tick, 100);
-    })();
-    
-    function formatDate(ms) {
-      var output = [];
-      if (ms>=HOUR) {
-        var hours = Math.floor(ms/HOUR);
-        output.push(hours+'h');
-        ms -= hours*HOUR;
+  script 
+    ;(function update() {
+      var intervals = {
+        WEEK: 604800000,
+        DAY: 86400000,
+        HOUR: 3600000,
+        MINUTE: 60000,
+        SECOND: 1000
       }
-      if (ms>=MINUTE) {
-        var minutes = Math.floor(ms/MINUTE);
-        output.push(minutes+'m');
-        ms -= minutes*MINUTE;
-      }
-      var seconds = Math.floor(ms/SECOND);
-      output.push(seconds+'s');
       
-      return output.join(' ');
-    }
-    
-    function getMiliseconds(date) {
-      var ms = 0;
-      for (type in date) {
-        if (type == 's') ms += date[type] * SECOND;
-        if (type == 'm') ms += date[type] * MINUTE;
-        if (type == 'h') ms += date[type] * HOUR;
+      var toGo = #{duration};
+      
+      (function tick() {
+        document.getElementById('time').innerHTML = formatDate(toGo);
+        scale();
+        toGo -= 1000;
+        window.setTimeout(tick, 1000);
+      })();
+      
+      window.onload = scale;
+      window.onresize = scale;
+      
+      function formatDate(ms) {
+        var output = [];
+        var buf;
+        for (i in intervals) {
+          if (ms>=intervals[i] || i=='SECOND') {
+            buf = Math.floor(ms/intervals[i]);
+            output.push(buf+i.substr(0,1).toLowerCase());
+            ms -= buf*intervals[i]
+          }
+        }
+        return output.join(' ');
       }
-      return ms;
-    }
-    
-    function parseDate(str) {
-      console.log(str);
-      var str = str
-        .replace(/ /g, '')
-        .replace(/hours/, 'h')
-        .replace(/minutes|min/, 'm')
-        .replace(/seconds|sec/, 's')
-    
-      var duration = 0;
-      var date = {};
-      var numBuffer = [];
-      for (var i = 0; i < str.length; i++) {
-        if (str.charCodeAt(i) < 97) {
-          numBuffer.push(str[i]);
-        } else {
-          date[str[i]] = parseInt(numBuffer.join(''), 10);
-          numBuffer = [];
-        };
+      
+      function scale() {
+        var width = Math.floor(0.9*document.body.clientWidth);
+        var el = document.getElementById('time');
+        found = false;
+        var size;
+        while(!found) {
+          if (el.style.fontSize == '' || el.getClientRects()[0].width > width) size = 12;
+          el.style.fontSize = ++size+'px';
+          console.log(el.getClientRects()[0].width);
+          if (el.getClientRects()[0].width >= width) found = true;
+        }
       }
-      return date;
-    }
+      
+    })();

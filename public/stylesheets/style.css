@@ -6,3 +6,8 @@ body {
 a {
   color: #00B7FF;
 }
+
+#time {
+  display: inline;
+  white-space: nowrap;
+}
