@@ -1,6 +1,11 @@
+html {
+  height: 100%;
+}
+
 body {
-  padding: 50px;
+  padding: 0px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  overflow: hidden;
 }
 
 a {
@@ -8,6 +13,14 @@ a {
 }
 
 #time {
-  display: inline;
   white-space: nowrap;
+  font-family: Consolas, 'Courier New', Courier;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+}
+
+#time span {
+  color: gray;
 }

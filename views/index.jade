@@ -1,7 +1,6 @@
 extends layout
 
 block content
-  h1#title= title
   p#time
   script 
     ;(function update() {
@@ -13,12 +12,20 @@ block content
         SECOND: 1000
       }
       
-      var toGo = #{duration};
+      // DOM elements
+      var body = document.childNodes[1];
+      var el = document.getElementById('time');
       
+      var start = #{duration};
+      var timeLeft = #{duration};
+      var largest = #{largest};
+      var len;
       (function tick() {
-        document.getElementById('time').innerHTML = formatDate(toGo);
-        scale();
-        toGo -= 1000;
+        var date = formatDate(timeLeft);
+        el.innerHTML = date;
+        if (len != date.length) scale();
+        len = date.length;
+        timeLeft -= 1000;
         window.setTimeout(tick, 1000);
       })();
       
@@ -28,27 +35,61 @@ block content
       function formatDate(ms) {
         var output = [];
         var buf;
+        var formatted;
         for (i in intervals) {
-          if (ms>=intervals[i] || i=='SECOND') {
+          if (ms>=intervals[i] || intervals[i]<=start) {
             buf = Math.floor(ms/intervals[i]);
-            output.push(buf+i.substr(0,1).toLowerCase());
-            ms -= buf*intervals[i]
+            formatted = pad(''+buf) + i.substr(0,1).toLowerCase();
+            if (ms < intervals[i] && start-ms < intervals[i]) {
+              formatted = '<span>'+formatted+'</span>';
+            }
+            output.push(formatted);
+            ms -= buf*intervals[i];
           }
         }
-        return output.join(' ');
+        return output.join('&nbsp;');
+      }
+      
+      function pad(str, len) {
+        len = len || 2;
+        while (str.length < len) {
+          str = '&nbsp;'+str;
+        }
+        return str;
       }
       
       function scale() {
-        var width = Math.floor(0.9*document.body.clientWidth);
-        var el = document.getElementById('time');
-        found = false;
-        var size;
-        while(!found) {
-          if (el.style.fontSize == '' || el.getClientRects()[0].width > width) size = 12;
-          el.style.fontSize = ++size+'px';
-          console.log(el.getClientRects()[0].width);
-          if (el.getClientRects()[0].width >= width) found = true;
+        var maxFactor = 0.85;
+        var maxWidth = Math.floor(body.clientWidth)*maxFactor;
+        var maxHeight = Math.floor(body.clientHeight)*maxFactor;
+        
+        var curSize = el.style.fontSize.substr(0, el.style.fontSize.length-2);
+        if (curSize == '') curSize = 12;
+        var curRect = el.getClientRects()[0];
+        while(true) {
+          if (curRect.width < maxWidth && curRect.height < maxHeight) {
+            el.style.fontSize = ++curSize+'px';
+            el.style.height = curSize+'px';
+            curRect = el.getClientRects()[0];
+            if (curRect.width >= maxWidth || curRect.height >= maxHeight) {
+              el.style.fontSize = --curSize+'px';
+              el.style.height = curSize+'px';
+              return position();
+            }
+          } else {
+            el.style.fontSize = --curSize+'px';
+            el.style.height = curSize+'px';
+            curRect = el.getClientRects()[0];
+            if (curRect.width < maxWidth && curRect.height < maxHeight) {
+              return position();
+            }
+          }
         }
+      }
+      
+      function position() {
+        el.style.marginTop = -(0.5*el.style.height.replace('px', ''))+'px';
+        el.style.marginLeft = -(0.5*el.getClientRects()[0].width)+'px';
       }
       
     })();
