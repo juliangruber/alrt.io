@@ -51,6 +51,7 @@ function getMiliseconds(date) {
 function parseDate(str) {
  var str = str
    .replace(/ /g, '')
+   .replace(/in/, '')
    .replace(/weeks|week|wochen|wochen/, 'w')
    .replace(/days|day|tage|tag/, 'd')
    .replace(/hours|hour|stunden|stunde/, 'h')
