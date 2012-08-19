@@ -45,11 +45,11 @@ function getMiliseconds(date) {
 function parseDate(str) {
  var str = str
    .replace(/ /g, '')
-   .replace(/weeks|week/, 'w')
-   .replace(/days|day/, 'd')
-   .replace(/hours|hour/, 'h')
-   .replace(/minutes|minute|mins|min/, 'm')
-   .replace(/seconds|seconds|secs|sec/, 's')
+   .replace(/weeks|week|wochen|wochen/, 'w')
+   .replace(/days|day|tage|tag/, 'd')
+   .replace(/hours|hour|stunden|stunde/, 'h')
+   .replace(/minutes|minute|mins|min|minuten/, 'm')
+   .replace(/seconds|seconds|secs|sec|sekunden|sekunde/, 's')
 
  var duration = 0;
  var date = {};

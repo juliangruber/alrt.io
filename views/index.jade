@@ -21,6 +21,7 @@ block content
       var largest = #{largest};
       var len;
       (function tick() {
+        if (timeLeft <= 0) { el.innerHTML = formatDate(0); return notify(); }
         var date = formatDate(timeLeft);
         el.innerHTML = date;
         if (len != date.length) scale();
@@ -31,6 +32,21 @@ block content
       
       window.onload = scale;
       window.onresize = scale;
+      
+      body.onload = function() {
+        if (!window.webkitNotifications) return;
+        if (window.webkitNotifications.checkPermission() == 0) return;
+        window.webkitNotifications.requestPermission();
+      }
+      
+      function notify() {
+        if (!window.webkitNotifications) return;
+        window.webkitNotifications.createNotification(
+          'favicon.ico',
+          'Alert',
+          'Timer finished (orig. '+formatDate(start)+')'
+        );
+      }
       
       function formatDate(ms) {
         var output = [];
@@ -53,7 +69,7 @@ block content
       function pad(str, len) {
         len = len || 2;
         while (str.length < len) {
-          str = '&nbsp;'+str;
+          str = '<span>0</span>'+str;
         }
         return str;
       }
