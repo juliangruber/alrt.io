@@ -20,6 +20,12 @@ exports.index = function(req, res) {
   });
 };
 
+exports.help = function(req, res) {
+  res.render('help', {
+    title: 'Alrt'
+  })
+}
+
 function getLargest(date) {
   for (type in date) {
     if (type == 'w') return intervals.WEEK;
