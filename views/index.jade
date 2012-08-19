@@ -36,7 +36,7 @@ block content
       body.onload = function() {
         if (!window.webkitNotifications) return;
         if (window.webkitNotifications.checkPermission() == 0) return;
-        window.webkitNotifications.requestPermission();
+        window.webkitNotifications.requestPermission(function(){/*noop*/});
       }
       
       function notify() {
