@@ -21,11 +21,13 @@ block content
       var largest = #{largest};
       var len;
       (function tick() {
-        if (timeLeft <= 0) { el.innerHTML = formatDate(0); return notify(); }
+        if (timeLeft <= 0) timeLeft = 0;
         var date = formatDate(timeLeft);
         el.innerHTML = date;
+        document.title = 'Alert: '+date.replace('&nbsp;','');
         if (len != date.length) scale();
         len = date.length;
+        if (timeLeft == 0) return notify();
         timeLeft -= 1000;
         window.setTimeout(tick, 1000);
       })();
@@ -40,7 +42,20 @@ block content
       }
       
       function notify() {
+        var i = 0;
+        setTimeout(title, 500);
+        function title() {
+          i++;
+          document.title = 'Alert: over';
+          document.title += (i%2)? ' !1!1!1!1' : ' 1!1!1!1!';
+          document.title += (i%2)? '!1!1!1!1' : '1!1!1!1!';
+          document.title += (i%2)? '!1!1!1!1' : '1!1!1!1!';
+          //document.title += ' ('+formatDate(start).replace('&nbsp;','')+')';
+          setTimeout(title, 500);
+        };
+      
         if (!window.webkitNotifications) return;
+        if (window.webkitNotifications.checkPermission()) return;
         window.webkitNotifications.createNotification(
           'favicon.ico',
           'Alert',
