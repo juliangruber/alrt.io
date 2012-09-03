@@ -49,8 +49,16 @@ function getMiliseconds(date) {
 }
 
 function parseDate(str) {
- var str = str
-   .replace(/ /g, '')
+  var str = str
+    .replace(/ /g, '');
+  
+  if (str.search('in') > -1) return parseRelative(str);
+  if (str.search(':') > -1) return parseAbsolute(str);
+  return parseRelative(str);
+}
+
+function parseRelative(str) {
+  var str = str
    .replace(/in/, '')
    .replace(/weeks|week|wochen|wochen/, 'w')
    .replace(/days|day|tage|tag/, 'd')
@@ -58,16 +66,30 @@ function parseDate(str) {
    .replace(/minutes|minute|mins|min|minuten/, 'm')
    .replace(/seconds|seconds|secs|sec|sekunden|sekunde/, 's')
 
- var duration = 0;
- var date = {};
- var numBuffer = [];
- for (var i = 0; i < str.length; i++) {
+  var duration = 0;
+  var date = {};
+  var numBuffer = [];
+  for (var i = 0; i < str.length; i++) {
    if (str.charCodeAt(i) < 97) {
      numBuffer.push(str[i]);
    } else {
      date[str[i]] = parseInt(numBuffer.join(''), 10);
      numBuffer = [];
    };
- }
- return date;
+  }
+  return date;
+}
+
+function parseAbsolute(str) {
+  console.log(str)
+  // 12:13
+  var sep;
+  if (str.search(':') > -1) sep = ':';
+  //if (str.search('|') > -1) sep = '|';
+  var segs = str.split(sep);
+  return {
+    h: segs[0],
+    m: segs[1],
+    s: segs.length > 2? segs[2] : null
+  }
 }
