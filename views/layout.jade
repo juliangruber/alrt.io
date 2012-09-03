@@ -3,9 +3,7 @@ html
   head
     title= title
     style(type='text/css')
-      html {
-        height: 100%;
-      }
+      html { height: 100%; }
 
       body {
         padding: 0px;
@@ -13,9 +11,7 @@ html
         overflow: hidden;
       }
 
-      a {
-        color: #00B7FF;
-      }
+      a, #enable { color: #00B7FF; }
 
       #time {
         white-space: nowrap;
@@ -28,6 +24,11 @@ html
 
       #time span {
         color: lightgray;
+      }
+      
+      #enable {
+        text-decoration: underline;
+        cursor: pointer;
       }
   body
     block content

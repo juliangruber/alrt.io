@@ -1,6 +1,7 @@
 extends layout
 
 block content
+  p#enable Enable notifications
   p#time
   script 
     ;(function update() {
@@ -32,16 +33,21 @@ block content
         window.setTimeout(tick, 1000);
       })();
       
-      window.onload = scale;
       window.onresize = scale;
       
-      body.onload = function() {
-        if (!window.webkitNotifications) return;
-        if (window.webkitNotifications.checkPermission() == 0) return;
-        window.webkitNotifications.requestPermission(function(){/*noop*/});
+      window.onload = function() {
+        scale();
+        if (!window.webkitNotifications.checkPermission()) {
+          return document.getElementById('enable').style.display = 'none';
+        }
+        document.getElementById('enable').onclick = function(e) {
+          window.webkitNotifications.requestPermission(function() {/*noop*/});
+        }
       }
       
-      function notify() {
+      function notify() { notifyWindow() || notifyTitle(); }
+      
+      function notifyTitle() {
         var i = 0;
         setTimeout(title, 500);
         function title() {
@@ -50,17 +56,19 @@ block content
           document.title += (i%2)? ' !1!1!1!1' : ' 1!1!1!1!';
           document.title += (i%2)? '!1!1!1!1' : '1!1!1!1!';
           document.title += (i%2)? '!1!1!1!1' : '1!1!1!1!';
-          //document.title += ' ('+formatDate(start).replace('&nbsp;','')+')';
           setTimeout(title, 500);
         };
+      }
       
-        if (!window.webkitNotifications) return;
-        if (window.webkitNotifications.checkPermission()) return;
+      function notifyWindow() {
+        if (!window.webkitNotifications) return false;
+        if (window.webkitNotifications.checkPermission()) return false;
         window.webkitNotifications.createNotification(
           'favicon.ico',
           'Alert',
-          'Timer finished (orig. '+formatDate(start)+')'
-        );
+          'Timer finished (after '+formatDate(start).replace('&nbsp;', '')+')'
+        ).show();
+        return true;
       }
       
       function formatDate(ms) {
