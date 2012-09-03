@@ -68,7 +68,7 @@ block content
         window.webkitNotifications.createNotification(
           'favicon.ico',
           'Alert',
-          'Timer finished (after '+formatDate(start).replace('&nbsp;', '')+')'
+          'Timer finished (after '+formatDate(start).replace(/&nbsp;/g, '')+')'
         ).show();
         return true;
       }
