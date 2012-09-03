@@ -37,11 +37,13 @@ block content
       
       window.onload = function() {
         scale();
-        if (!window.webkitNotifications.checkPermission()) {
-          return document.getElementById('enable').style.display = 'none';
+        if (window.webkitNotifications.checkPermission()) {
+          document.getElementById('enable').style.display = 'block';
         }
         document.getElementById('enable').onclick = function(e) {
-          window.webkitNotifications.requestPermission(function() {/*noop*/});
+          window.webkitNotifications.requestPermission(function() {
+            document.getElementById('enable').style.display = 'none';
+          });
         }
       }
       
