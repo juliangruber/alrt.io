@@ -19,20 +19,28 @@
   var el = document.getElementById('time');
   
   // Get variables from express
-  var start = window.duration;
-  var timeLeft = parseInt(start, 10);
+  var duration = window.duration;
+  var timeLeft = duration;
   var largest = window.largest;
   
-  var len;
+  var start = +new Date();
+  
+  var oldLength;
   (function tick() {
     if (timeLeft <= 0) timeLeft = 0;
     var date = formatDate(timeLeft);
+    
     el.innerHTML = date;
-    document.title = 'Alert: '+date.replace(/&nbsp;/g,' ').replace(/<span>|<\/span>/g, '');
-    if (len != date.length) scale();
-    len = date.length;
+    var title = 'Alert: ';
+    title += date.replace(/&nbsp;/g,' ').replace(/<span>|<\/span>/g, '');
+    document.title = title;
+    
+    if (oldLength != date.length) scale();
+    oldLength = date.length;
+    
     if (timeLeft == 0) return notify();
-    timeLeft -= 1000;
+    
+    timeLeft = start + duration - +new Date();
     window.setTimeout(tick, 1000);
   })();
   
@@ -80,7 +88,7 @@
     notifications.createNotification(
       'favicon.ico',
       'Alert',
-      'Timer finished (after '+formatDate(start).replace(/&nbsp;/g, '')+')'
+      'Timer finished (after '+formatDate(duration).replace(/&nbsp;/g, '')+')'
     ).show();
     return true;
   }
@@ -90,10 +98,10 @@
     var buf;
     var formatted;
     for (i in intervals) {
-      if (ms>=intervals[i] || intervals[i]<=start) {
+      if (ms>=intervals[i] || intervals[i]<=duration) {
         buf = Math.floor(ms/intervals[i]);
         formatted = pad(''+buf) + i.substr(0,1).toLowerCase();
-        if (ms < intervals[i] && start-ms < intervals[i]) {
+        if (ms < intervals[i] && duration-ms < intervals[i]) {
           formatted = '<span>'+formatted+'</span>';
         }
         output.push(formatted);
