@@ -59,13 +59,12 @@ function parseDate(str) {
 
 function parseRelative(str) {
   var str = str
-   .replace(/in/, '')
-   .replace(/weeks|week|wochen|wochen/, 'w')
-   .replace(/days|day|tage|tag/, 'd')
-   .replace(/hours|hour|stunden|stunde/, 'h')
-   .replace(/minutes|minute|mins|min|minuten/, 'm')
-   .replace(/seconds|seconds|secs|sec|sekunden|sekunde/, 's')
-
+   .replace(/^in/, '')
+   .replace(/week(s)?|woche(n)?/i, 'w')
+   .replace(/day(s)?|tag(e)?/i, 'd')
+   .replace(/hour(s)?|stunde(n)?|std/i, 'h')
+   .replace(/min[a-z]*/i, 'm')
+   .replace(/se(c|k)[a-z]*/i, 's')
   var duration = 0;
   var date = {};
   var numBuffer = [];
