@@ -356,6 +356,357 @@ exports.unbind = function(el, type, fn, capture){
 };
 
 });
+require.register("component-style/index.js", function(exports, require, module){
+
+/**
+ * Expose `style`.
+ */
+
+module.exports = style;
+
+/**
+ * Return the style for `prop` using the given `selector`.
+ *
+ * @param {String} selector
+ * @param {String} prop
+ * @return {String}
+ * @api public
+ */
+
+function style(selector, prop) {
+  var cache = style.cache = style.cache || {}
+    , cid = selector + ':' + prop;
+
+  if (cache[cid]) return cache[cid];
+
+  var parts = selector.split(/ +/)
+    , len = parts.length
+    , parent = document.createElement('div')
+    , root = parent
+    , child
+    , part;
+
+  for (var i = 0; i < len; ++i) {
+    part = parts[i];
+    child = document.createElement('div');
+    parent.appendChild(child);
+    parent = child;
+    if ('#' == part[0]) {
+      child.setAttribute('id', part.substr(1));
+    } else if ('.' == part[0]) {
+      child.setAttribute('class', part.substr(1));
+    }
+  }
+
+  document.body.appendChild(root);
+  var ret = getComputedStyle(child)[prop];
+  document.body.removeChild(root);
+  return cache[cid] = ret;
+}
+});
+require.register("component-inherit/index.js", function(exports, require, module){
+
+module.exports = function(a, b){
+  var fn = function(){};
+  fn.prototype = b.prototype;
+  a.prototype = new fn;
+  a.prototype.constructor = a;
+};
+});
+require.register("component-pie/index.js", function(exports, require, module){
+
+/**
+ * Module dependencies.
+ */
+
+var style = require('style');
+
+/**
+ * Expose `Pie()`.
+ */
+
+module.exports = Pie;
+
+/**
+ * Initialize a new `Pie` with
+ * an optional css `selector`,
+ * defaulting to ".pie".
+ *
+ * @param {String} selector
+ * @api public
+ */
+
+function Pie(selector) {
+  if (!(this instanceof Pie)) return new Pie(selector);
+  selector = selector || '.pie';
+  this.background = style(selector, 'background-color');
+  this.borderWidth = parseInt(style(selector, 'border-width'), 10);
+  this.borderColor = style(selector, 'border-color');
+  this.color = style(selector, 'color');
+  this.size(16);
+}
+
+/**
+ * Update percentage to `n`.
+ *
+ * @param {Number} n
+ * @return {Pie}
+ * @api public
+ */
+
+Pie.prototype.update = function(n){
+  this.percent = n;
+  return this;
+};
+
+/**
+ * Set size to `n`.
+ *
+ * @param {Number} n
+ * @return {Pie}
+ * @api public
+ */
+
+Pie.prototype.size = function(n){
+  this._size = n;
+  return this;
+};
+
+/**
+ * Draw on to `ctx`.
+ *
+ * @param {CanvasContext2d} ctx
+ * @return {Pie}
+ * @api public
+ */
+
+Pie.prototype.draw = function(ctx){
+  var size = this._size;
+  var half = size / 2;
+  var n = this.percent / 100;
+  var pi = Math.PI * 2;
+
+  // clear
+  ctx.clearRect(0, 0, size, size);
+
+  // border
+  ctx.beginPath();
+  ctx.moveTo(half, half);
+  ctx.arc(half, half, half, 0, pi, false);
+  ctx.fillStyle = this.borderColor;
+  ctx.fill();
+
+  // background
+  ctx.beginPath();
+  ctx.moveTo(half, half);
+  ctx.arc(half, half, half - this.borderWidth, 0, pi, false);
+  ctx.fillStyle = this.background;
+  ctx.fill();
+
+  // pie
+  ctx.beginPath();
+  ctx.moveTo(half, half);
+  ctx.arc(half, half, half - this.borderWidth, 0, pi * n, false);
+  ctx.fillStyle = this.color;
+  ctx.fill();
+
+  return this;
+};
+
+});
+require.register("component-favicon/index.js", function(exports, require, module){
+
+/**
+ * Original favicon.
+ */
+
+var orig;
+
+/**
+ * Expose `set()`.
+ */
+
+exports = module.exports = set;
+
+/**
+ * Expose `reset()`.
+ */
+
+exports.reset = reset;
+
+/**
+ * Expose `current()`.
+ */
+
+exports.current = current;
+
+/**
+ * Set the favicon to the given data uri `str`.
+ *
+ * @param {String} str
+ * @api public
+ */
+
+function set(str) {
+  if ('string' != typeof str) throw new TypeError('data uri string expected');
+  var prev = remove();
+  if (!orig) orig = prev;
+  var link = document.createElement('link');
+  link.type = 'image/x-icon';
+  link.rel = 'icon';
+  link.href = str;
+  head().appendChild(link);
+}
+
+/**
+ * Reset to the original favicon.
+ *
+ * @api public
+ */
+
+function reset() {
+  remove();
+  if (orig) head().appendChild(orig);
+}
+
+/**
+ * Return current favicon link with rel=icon.
+ *
+ * @return {Element}
+ * @api private
+ */
+
+function current() {
+  var rel;
+  var links = document.getElementsByTagName('link');
+  for (var i = 0; i < links.length; ++i) {
+    rel = links[i].getAttribute('rel') || '';
+    if (rel.match(/\bicon\b/)) {
+      return links[i];
+    }
+  }
+}
+
+/**
+ * Remove current favicon link with rel=icon.
+ *
+ * @return {Element}
+ * @api private
+ */
+
+function remove() {
+  var link = current();
+  if (!link) return;
+  head().removeChild(link);
+  return link;
+}
+
+/**
+ * Return the head element.
+ *
+ * @return {Element}
+ * @api private
+ */
+
+function head() {
+  return document.getElementsByTagName('head')[0];
+}
+});
+require.register("component-autoscale-canvas/index.js", function(exports, require, module){
+
+/**
+ * Retina-enable the given `canvas`.
+ *
+ * @param {Canvas} canvas
+ * @return {Canvas}
+ * @api public
+ */
+
+module.exports = function(canvas){
+  var ctx = canvas.getContext('2d');
+  var ratio = window.devicePixelRatio || 1;
+  if (1 != ratio) {
+    canvas.style.width = canvas.width + 'px';
+    canvas.style.height = canvas.height + 'px';
+    canvas.width *= ratio;
+    canvas.height *= ratio;
+    ctx.scale(ratio, ratio);
+  }
+  return canvas;
+};
+});
+require.register("component-piecon/index.js", function(exports, require, module){
+
+/**
+ * Module dependencies.
+ */
+
+var style = require('style')
+  , inherit = require('inherit')
+  , favicon = require('favicon')
+  , autoscale = require('autoscale-canvas')
+  , Pie = require('pie');
+
+/**
+ * Expose `Piecon()`.
+ */
+
+module.exports = Piecon;
+
+/**
+ * Initialize a new `Piecon` with
+ * an optional css `selector`,
+ * defaulting to ".pie".
+ *
+ * @param {String} selector
+ * @api public
+ */
+
+function Piecon(selector) {
+  if (!(this instanceof Piecon)) return new Piecon(selector);
+  this.el = document.createElement('canvas');
+  this.ctx = this.el.getContext('2d');
+  Pie.call(this, selector);
+}
+
+/**
+ * Inherits from `Pie.prototype`.
+ */
+
+inherit(Piecon, Pie);
+
+/**
+ * Set size to `n`.
+ *
+ * @param {Number} n
+ * @return {Piecon}
+ * @api public
+ */
+
+Piecon.prototype.size = function(n){
+  this._size = n;
+  this.el.width = n;
+  this.el.height = n;
+  autoscale(this.el);
+  return this;
+};
+
+/**
+ * Update percentage to `n`.
+ *
+ * @param {Number} n
+ * @return {Piecon}
+ * @api public
+ */
+
+Piecon.prototype.update = function(n){
+  this.percent = n;
+  this.draw(this.ctx);
+  favicon(this.el.toDataURL());
+  return this;
+};
+
+});
 require.register("alrt/index.js", function(exports, require, module){
 /**
  * module dependencies
@@ -364,6 +715,7 @@ require.register("alrt/index.js", function(exports, require, module){
 var supersize = require('supersize');
 var intervals = require('intervals');
 var events = require('event');
+var Piecon = require('piecon');
 
 /**
  * time display
@@ -413,11 +765,14 @@ events.bind(document.getElementById('enable'), 'click', function(e) {
 var start = +new Date();
 var timeLeft = duration;
 var scaled = false;
+var piecon = window.piecon = new Piecon();
 
 function tick () {
   displayTime(formatDate(timeLeft));
   if (!scaled) scale();
   scaled = true;
+  
+  piecon.update((1 - timeLeft / duration) * 100);
   
   if (timeLeft == 0) return notify();
   
@@ -502,4 +857,16 @@ require.alias("component-css/index.js", "juliangruber-supersize/deps/css/index.j
 require.alias("juliangruber-intervals/index.js", "alrt/deps/intervals/index.js");
 
 require.alias("component-event/index.js", "alrt/deps/event/index.js");
+
+require.alias("component-piecon/index.js", "alrt/deps/piecon/index.js");
+require.alias("component-style/index.js", "component-piecon/deps/style/index.js");
+
+require.alias("component-inherit/index.js", "component-piecon/deps/inherit/index.js");
+
+require.alias("component-pie/index.js", "component-piecon/deps/pie/index.js");
+require.alias("component-style/index.js", "component-pie/deps/style/index.js");
+
+require.alias("component-favicon/index.js", "component-piecon/deps/favicon/index.js");
+
+require.alias("component-autoscale-canvas/index.js", "component-piecon/deps/autoscale-canvas/index.js");
 

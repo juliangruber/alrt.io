@@ -12,4 +12,5 @@ logs
 results
 
 node_modules
-npm-debug.logpublic/components
+npm-debug.log
+public/components

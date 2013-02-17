@@ -4,8 +4,9 @@
     "index.js"
   ],
   "dependencies": {
-    "juliangruber/supersize": "0.0.1",
-    "juliangruber/intervals": "*",
-    "component/event": "0.1.0"
+    "juliangruber/supersize": "0.0.2",
+    "juliangruber/intervals": "0.0.2",
+    "component/event": "0.1.0",
+    "component/piecon": "0.0.2"
   }
 }

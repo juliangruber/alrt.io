@@ -5,6 +5,7 @@
 var supersize = require('supersize');
 var intervals = require('intervals');
 var events = require('event');
+var Piecon = require('piecon');
 
 /**
  * time display
@@ -54,11 +55,14 @@ events.bind(document.getElementById('enable'), 'click', function(e) {
 var start = +new Date();
 var timeLeft = duration;
 var scaled = false;
+var piecon = window.piecon = new Piecon();
 
 function tick () {
   displayTime(formatDate(timeLeft));
   if (!scaled) scale();
   scaled = true;
+  
+  piecon.update((1 - timeLeft / duration) * 100);
   
   if (timeLeft == 0) return notify();
   
