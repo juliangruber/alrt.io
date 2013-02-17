@@ -1,9 +1,20 @@
 extends layout
 
 block content
-  p#enable Enable notifications
-  p#time
+  #container
+    p#enable Enable notifications
+    p#time 
+  
+  style(type="text/css")
+    #container {
+      position : absolute;
+      height : 100%;
+      width : 100%;
+    }
+  
   script
-    window.duration = #{duration}
-    window.largest = #{largest}
-  script(src="/script.js")
+    window.duration = #{duration};
+    window.largest = #{largest};
+  script(src="/build/build.js")
+  script
+    require('alrt');

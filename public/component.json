@@ -1,0 +1,11 @@
+{
+  "name": "alrt",
+  "scripts": [
+    "index.js"
+  ],
+  "dependencies": {
+    "juliangruber/supersize": "0.0.1",
+    "juliangruber/intervals": "*",
+    "component/event": "0.1.0"
+  }
+}
