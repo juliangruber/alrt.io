@@ -55,7 +55,7 @@ events.bind(document.getElementById('enable'), 'click', function(e) {
 var start = +new Date();
 var timeLeft = duration;
 var scaled = false;
-var piecon = window.piecon = new Piecon();
+var piecon = new Piecon();
 
 function tick () {
   displayTime(formatDate(timeLeft));
