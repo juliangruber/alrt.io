@@ -1,14 +1,17 @@
-
-/*
- * GET home page.
- */
-
 var intervals = {
  WEEK: 604800000,
  DAY: 86400000,
  HOUR: 3600000,
  MINUTE: 60000,
  SECOND: 1000
+}
+
+var intervalMap = {
+  w : 'WEEK',
+  d : 'DAY',
+  h : 'HOUR',
+  m : 'MINUTE',
+  s : 'SECOND'
 }
 
 exports.index = function(req, res) {
@@ -27,68 +30,69 @@ exports.help = function(req, res) {
 }
 
 function getLargest(date) {
-  for (type in date) {
-    if (type == 'w') return intervals.WEEK;
-    if (type == 'd') return intervals.DAY;
-    if (type == 'h') return intervals.HOUR;
-    if (type == 'm') return intervals.MINUTE;
-    if (type == 's') return intervals.SECOND;
-  } 
+  for (var abbr in intervalMap) {
+    if (date[abbr]) {
+      return intervals[intervalMap[abbr]];
+    }
+  }
+  return 0;
 }
 
 function getMiliseconds(date) {
- var ms = 0;
- for (type in date) {
-   if (type == 's') ms += date[type] * intervals.SECOND;
-   if (type == 'm') ms += date[type] * intervals.MINUTE;
-   if (type == 'h') ms += date[type] * intervals.HOUR;
-   if (type == 'd') ms += date[type] * intervals.DAY;
-   if (type == 'w') ms += date[type] * intervals.WEEK;
- }
- return ms;
+  var ms = 0;
+  for (var abbr in intervalMap) {
+    if (date[abbr]) {
+      ms += date[abbr] * intervals[intervalMap[abbr]];
+    }
+  }
+  return ms;
 }
 
 function parseDate(str) {
-  var str = str
-    .replace(/ /g, '');
-  
-  if (str.search('in') > -1) return parseRelative(str);
-  if (str.search(':') > -1) return parseAbsolute(str);
-  return parseRelative(str);
+  return ~str.search(':')
+    ? parseAbsolute(str)
+    : parseRelative(str);
 }
 
 function parseRelative(str) {
   var str = str
-   .replace(/^in/, '')
-   .replace(/week(s)?|woche(n)?/i, 'w')
-   .replace(/day(s)?|tag(e)?/i, 'd')
-   .replace(/hour(s)?|stunde(n)?|std/i, 'h')
-   .replace(/min[a-z]*/i, 'm')
-   .replace(/se(c|k)[a-z]*/i, 's')
+    .replace(/ /g, '')
+    .replace(/^in/, '')
+    .replace(/week(s)?|woche(n)?/i, 'w')
+    .replace(/day(s)?|tag(e)?/i, 'd')
+    .replace(/hour(s)?|stunde(n)?|std/i, 'h')
+    .replace(/min[a-z]*/i, 'm')
+    .replace(/se(c|k)[a-z]*/i, 's')
+
   var duration = 0;
   var date = {};
   var numBuffer = [];
+
   for (var i = 0; i < str.length; i++) {
-   if (str.charCodeAt(i) < 97) {
-     numBuffer.push(str[i]);
-   } else {
-     date[str[i]] = parseInt(numBuffer.join(''), 10);
-     numBuffer = [];
-   };
+    if (str.charCodeAt(i) < 97) {
+      numBuffer.push(str[i]);
+    } else {
+      date[str[i]] = parseInt(numBuffer.join(''), 10);
+      numBuffer = [];
+    }
   }
+
   return date;
 }
 
 function parseAbsolute(str) {
-  console.log(str)
-  // 12:13
-  var sep;
-  if (str.search(':') > -1) sep = ':';
-  //if (str.search('|') > -1) sep = '|';
-  var segs = str.split(sep);
-  return {
-    h: segs[0],
-    m: segs[1],
-    s: segs.length > 2? segs[2] : null
+  var dt = Number(new Date(str)) - Date.now();
+  console.log('dt', dt)
+  var parsed = {};
+
+  for (var abbr in intervalMap) {
+    var length = intervals[intervalMap[abbr]];
+    parsed[abbr] = dt >= length
+      ? Math.floor(dt / length)
+      : 0;
+    dt -= parsed[abbr] * length;
   }
+
+  console.log('parsed', parsed);
+  return parsed;
 }
