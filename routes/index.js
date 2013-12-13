@@ -58,9 +58,9 @@ function parseRelative(str) {
   var str = str
     .replace(/ /g, '')
     .replace(/^in/, '')
-    .replace(/week(s)?|woche(n)?/i, 'w')
-    .replace(/day(s)?|tag(e)?/i, 'd')
-    .replace(/hour(s)?|stunde(n)?|std/i, 'h')
+    .replace(/weeks?|wochen?/i, 'w')
+    .replace(/days?|tage?/i, 'd')
+    .replace(/hours?|stunden?|std/i, 'h')
     .replace(/min[a-z]*/i, 'm')
     .replace(/se(c|k)[a-z]*/i, 's')
 
