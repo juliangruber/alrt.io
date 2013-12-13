@@ -5,6 +5,9 @@
   "scripts": {
     "start": "node app.js"
   },
+  "bin": {
+    "alrt.io": "bin/alrt.io.js"
+  },
   "dependencies": {
     "express": "3.0.0rc2",
     "jade": "~0.27.7"
