@@ -1,6 +1,6 @@
 {
   "name": "alrt.io",
-  "version": "0.0.1-7",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node app.js"
@@ -8,16 +8,5 @@
   "bin": {
     "alrt.io": "bin/alrt.io.js"
   },
-  "dependencies": {
-    "express": "3.0.0rc2",
-    "jade": "~0.27.7"
-  },
-  "domains": [
-    "alrt.io",
-    "www.alrt.io"
-  ],
-  "subdomain": "alrtio",
-  "engines": {
-    "node": "0.8.x"
-  }
+  "dependencies": {}
 }
