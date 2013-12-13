@@ -82,7 +82,6 @@ function parseRelative(str) {
 
 function parseAbsolute(str) {
   var dt = Number(new Date(str)) - Date.now();
-  console.log('dt', dt)
   var parsed = {};
 
   for (var abbr in intervalMap) {
@@ -93,6 +92,5 @@ function parseAbsolute(str) {
     dt -= parsed[abbr] * length;
   }
 
-  console.log('parsed', parsed);
   return parsed;
 }
