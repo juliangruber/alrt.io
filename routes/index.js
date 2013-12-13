@@ -4,7 +4,7 @@ var intervals = {
  HOUR: 3600000,
  MINUTE: 60000,
  SECOND: 1000
-}
+};
 
 var intervalMap = {
   w : 'WEEK',
@@ -12,7 +12,7 @@ var intervalMap = {
   h : 'HOUR',
   m : 'MINUTE',
   s : 'SECOND'
-}
+};
 
 exports.index = function(req, res) {
   var date = parseDate(req.params.time);
@@ -26,8 +26,8 @@ exports.index = function(req, res) {
 exports.help = function(req, res) {
   res.render('help', {
     title: 'Alrt'
-  })
-}
+  });
+};
 
 function getLargest(date) {
   for (var abbr in intervalMap) {
