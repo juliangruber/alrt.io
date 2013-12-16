@@ -1,0 +1,8 @@
+{
+  "name": "sequence",
+  "dependencies": {
+    "component/bind": "*"
+  },
+  "scripts": ["index.js"],
+  "local": ["timer"]
+}

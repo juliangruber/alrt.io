@@ -5,5 +5,5 @@
   "dependencies": {
     "visionmedia/page.js": "*"
   },
-  "local": ["timer", "home"]
+  "local": ["sequence", "home"]
 }

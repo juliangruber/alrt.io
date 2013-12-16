@@ -8,7 +8,8 @@
     "juliangruber/audio-context": "*",
     "godmodelabs/span": "*",
     "component/favicon": "*",
-    "component/raf": "*"
+    "component/raf": "*",
+    "component/emitter": "*"
   },
   "scripts": ["index.js", "template.js", "beep.js"],
   "styles": ["style.css"],
