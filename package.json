@@ -8,5 +8,7 @@
   "bin": {
     "alrt.io": "bin/alrt.io.js"
   },
-  "dependencies": {}
+  "dependencies": {
+    "ecstatic": "~0.4.13"
+  }
 }

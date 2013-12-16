@@ -1,0 +1,40 @@
+.pie {
+  color: #EC4E89;
+  background: #bbb;
+  border: 2px solid white;
+}
+
+
+
+.pie {
+  color: #EC4E89;
+  background: #bbb;
+  border: 2px solid white;
+}
+
+
+
+
+
+
+
+
+
+
+.timer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.pie {
+  color: red;
+  background: blue;
+  border: 2px solid green;
+}
+
+body {
+  overflow: hidden;
+  margin: 0;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}

@@ -1,0 +1,16 @@
+{
+  "name": "timer",
+  "dependencies": {
+    "component/bind": "*",
+    "component/piecon": "*",
+    "component/domify": "*",
+    "matthewp/text": "*",
+    "juliangruber/audio-context": "*",
+    "godmodelabs/span": "*",
+    "component/favicon": "*",
+    "component/raf": "*"
+  },
+  "scripts": ["index.js", "template.js", "beep.js"],
+  "styles": ["style.css"],
+  "local": ["time-view"]
+}

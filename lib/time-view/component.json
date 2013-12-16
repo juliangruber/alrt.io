@@ -1,0 +1,11 @@
+{
+  "name": "time-view",
+  "dependencies": {
+    "component/progress": "*",
+    "component/bind": "*",
+    "component/css": "*",
+    "component/debounce": "*",
+    "godmodelabs/span": "*"
+  },
+  "scripts": ["index.js"]
+}

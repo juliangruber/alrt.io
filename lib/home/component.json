@@ -1,0 +1,8 @@
+{
+  "name": "home",
+  "scripts": ["index.js", "template.js"],
+  "dependencies": {
+    "component/domify": "*",
+    "visionmedia/page.js": "*"
+  }
+}
