@@ -1,0 +1,17 @@
+.copy {
+  color: #aaa;
+  font-family: "HelveticaNeue-UltraLight";
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  margin-top: -1ex;
+  font-size: 100%;
+  text-align: center;
+  transition: .5s;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.copy.high {
+  color: white;
+}

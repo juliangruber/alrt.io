@@ -1,11 +1,14 @@
 {
   "name": "time-view",
   "dependencies": {
-    "component/progress": "*",
     "component/bind": "*",
     "component/css": "*",
     "component/debounce": "*",
-    "godmodelabs/span": "*"
+    "godmodelabs/span": "*",
+    "visionmedia/page.js": "*",
+    "component/autoscale-canvas": "*",
+    "component/domify": "*"
   },
-  "scripts": ["index.js"]
+  "scripts": ["index.js", "template.js"],
+  "styles": ["style.css"]
 }
