@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node bin/alrt.io.js"
   },
   "bin": {
     "alrt.io": "bin/alrt.io.js"
