@@ -143,6 +143,34 @@ html, body {
     color: #3c5555;
     font-weight: 300;
     line-height: 22.4px; }
+    .home__form p b {
+      font-weight: 300;
+      color: #788a76; }
+
+@font-face {
+     font-family: 'Lato';
+     src: url('/build/font/Lato-Hairline.ttf') format('truetype');
+     font-weight: 100;
+     font-style: normal;
+}
+@font-face {
+     font-family: 'Lato';
+     src: url('/build/font/Lato-Light.ttf') format('truetype');
+     font-weight: 300;
+     font-style: italic;
+}
+@font-face {
+     font-family: 'Lato';
+     src: url('/build/font/Lato-Regular.ttf') format('truetype');
+     font-weight: 500;
+     font-style: normal;
+}
+@font-face {
+     font-family: 'Lato';
+     src: url('/build/font/Lato-Bold.ttf') format('truetype');
+     font-weight: 700;
+     font-style: normal;
+}
 
 body {
   overflow: hidden;

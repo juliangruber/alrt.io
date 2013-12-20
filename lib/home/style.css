@@ -92,3 +92,6 @@ html, body {
     color: #3c5555;
     font-weight: 300;
     line-height: 22.4px; }
+    .home__form p b {
+      font-weight: 300;
+      color: #788a76; }
