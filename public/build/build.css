@@ -21,6 +21,23 @@
 
 
 
+.copy {
+  color: #aaa;
+  font-family: "HelveticaNeue-UltraLight";
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  margin-top: -1ex;
+  font-size: 100%;
+  text-align: center;
+  transition: .5s;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.copy.high {
+  color: white;
+}
 .timer {
   width: 100%;
   height: 100%;
@@ -37,4 +54,5 @@ body {
   overflow: hidden;
   margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: black;
 }

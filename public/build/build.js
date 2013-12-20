@@ -1301,149 +1301,181 @@ exports.cancel = function(id){\n\
 };\n\
 //@ sourceURL=component-raf/index.js"
 ));
-require.register("component-progress/index.js", Function("exports, require, module",
+require.register("component-indexof/index.js", Function("exports, require, module",
+"module.exports = function(arr, obj){\n\
+  if (arr.indexOf) return arr.indexOf(obj);\n\
+  for (var i = 0; i < arr.length; ++i) {\n\
+    if (arr[i] === obj) return i;\n\
+  }\n\
+  return -1;\n\
+};//@ sourceURL=component-indexof/index.js"
+));
+require.register("component-emitter/index.js", Function("exports, require, module",
 "\n\
 /**\n\
  * Module dependencies.\n\
  */\n\
 \n\
-var autoscale = require('autoscale-canvas');\n\
+var index = require('indexof');\n\
 \n\
 /**\n\
- * Expose `Progress`.\n\
+ * Expose `Emitter`.\n\
  */\n\
 \n\
-module.exports = Progress;\n\
+module.exports = Emitter;\n\
 \n\
 /**\n\
- * Initialize a new `Progress` indicator.\n\
- */\n\
-\n\
-function Progress() {\n\
-  this.percent = 0;\n\
-  this.el = document.createElement('canvas');\n\
-  this.ctx = this.el.getContext('2d');\n\
-  this.size(50);\n\
-  this.fontSize(11);\n\
-  this.font('helvetica, arial, sans-serif');\n\
-}\n\
-\n\
-/**\n\
- * Set progress size to `n`.\n\
+ * Initialize a new `Emitter`.\n\
  *\n\
- * @param {Number} n\n\
- * @return {Progress}\n\
  * @api public\n\
  */\n\
 \n\
-Progress.prototype.size = function(n){\n\
-  this.el.width = n;\n\
-  this.el.height = n;\n\
-  autoscale(this.el);\n\
-  return this;\n\
+function Emitter(obj) {\n\
+  if (obj) return mixin(obj);\n\
 };\n\
 \n\
 /**\n\
- * Set text to `str`.\n\
+ * Mixin the emitter properties.\n\
  *\n\
- * @param {String} str\n\
- * @return {Progress}\n\
- * @api public\n\
- */\n\
-\n\
-Progress.prototype.text = function(str){\n\
-  this._text = str;\n\
-  return this;\n\
-};\n\
-\n\
-/**\n\
- * Set font size to `n`.\n\
- *\n\
- * @param {Number} n\n\
- * @return {Progress}\n\
- * @api public\n\
- */\n\
-\n\
-Progress.prototype.fontSize = function(n){\n\
-  this._fontSize = n;\n\
-  return this;\n\
-};\n\
-\n\
-/**\n\
- * Set font `family`.\n\
- *\n\
- * @param {String} family\n\
- * @return {Progress}\n\
- * @api public\n\
- */\n\
-\n\
-Progress.prototype.font = function(family){\n\
-  this._font = family;\n\
-  return this;\n\
-};\n\
-\n\
-/**\n\
- * Update percentage to `n`.\n\
- *\n\
- * @param {Number} n\n\
- * @return {Progress}\n\
- * @api public\n\
- */\n\
-\n\
-Progress.prototype.update = function(n){\n\
-  this.percent = n;\n\
-  this.draw(this.ctx);\n\
-  return this;\n\
-};\n\
-\n\
-/**\n\
- * Draw on `ctx`.\n\
- *\n\
- * @param {CanvasRenderingContext2d} ctx\n\
- * @return {Progress}\n\
+ * @param {Object} obj\n\
+ * @return {Object}\n\
  * @api private\n\
  */\n\
 \n\
-Progress.prototype.draw = function(ctx){\n\
-  var percent = Math.min(this.percent, 100)\n\
-    , ratio = window.devicePixelRatio || 1\n\
-    , size = this.el.width / ratio\n\
-    , half = size / 2\n\
-    , x = half\n\
-    , y = half\n\
-    , rad = half - 1\n\
-    , fontSize = this._fontSize;\n\
+function mixin(obj) {\n\
+  for (var key in Emitter.prototype) {\n\
+    obj[key] = Emitter.prototype[key];\n\
+  }\n\
+  return obj;\n\
+}\n\
 \n\
-  ctx.font = fontSize + 'px ' + this._font;\n\
+/**\n\
+ * Listen on the given `event` with `fn`.\n\
+ *\n\
+ * @param {String} event\n\
+ * @param {Function} fn\n\
+ * @return {Emitter}\n\
+ * @api public\n\
+ */\n\
 \n\
-  var angle = Math.PI * 2 * (percent / 100);\n\
-  ctx.clearRect(0, 0, size, size);\n\
+Emitter.prototype.on =\n\
+Emitter.prototype.addEventListener = function(event, fn){\n\
+  this._callbacks = this._callbacks || {};\n\
+  (this._callbacks[event] = this._callbacks[event] || [])\n\
+    .push(fn);\n\
+  return this;\n\
+};\n\
 \n\
-  // outer circle\n\
-  ctx.strokeStyle = '#9f9f9f';\n\
-  ctx.beginPath();\n\
-  ctx.arc(x, y, rad, 0, angle, false);\n\
-  ctx.stroke();\n\
+/**\n\
+ * Adds an `event` listener that will be invoked a single\n\
+ * time then automatically removed.\n\
+ *\n\
+ * @param {String} event\n\
+ * @param {Function} fn\n\
+ * @return {Emitter}\n\
+ * @api public\n\
+ */\n\
 \n\
-  // inner circle\n\
-  ctx.strokeStyle = '#eee';\n\
-  ctx.beginPath();\n\
-  ctx.arc(x, y, rad - 1, 0, angle, true);\n\
-  ctx.stroke();\n\
+Emitter.prototype.once = function(event, fn){\n\
+  var self = this;\n\
+  this._callbacks = this._callbacks || {};\n\
 \n\
-  // text\n\
-  var text = this._text || (percent | 0) + '%'\n\
-    , w = ctx.measureText(text).width;\n\
+  function on() {\n\
+    self.off(event, on);\n\
+    fn.apply(this, arguments);\n\
+  }\n\
 \n\
-  ctx.fillText(\n\
-      text\n\
-    , x - w / 2 + 1\n\
-    , y + fontSize / 2 - 1);\n\
+  fn._off = on;\n\
+  this.on(event, on);\n\
+  return this;\n\
+};\n\
+\n\
+/**\n\
+ * Remove the given callback for `event` or all\n\
+ * registered callbacks.\n\
+ *\n\
+ * @param {String} event\n\
+ * @param {Function} fn\n\
+ * @return {Emitter}\n\
+ * @api public\n\
+ */\n\
+\n\
+Emitter.prototype.off =\n\
+Emitter.prototype.removeListener =\n\
+Emitter.prototype.removeAllListeners =\n\
+Emitter.prototype.removeEventListener = function(event, fn){\n\
+  this._callbacks = this._callbacks || {};\n\
+\n\
+  // all\n\
+  if (0 == arguments.length) {\n\
+    this._callbacks = {};\n\
+    return this;\n\
+  }\n\
+\n\
+  // specific event\n\
+  var callbacks = this._callbacks[event];\n\
+  if (!callbacks) return this;\n\
+\n\
+  // remove all handlers\n\
+  if (1 == arguments.length) {\n\
+    delete this._callbacks[event];\n\
+    return this;\n\
+  }\n\
+\n\
+  // remove specific handler\n\
+  var i = index(callbacks, fn._off || fn);\n\
+  if (~i) callbacks.splice(i, 1);\n\
+  return this;\n\
+};\n\
+\n\
+/**\n\
+ * Emit `event` with the given args.\n\
+ *\n\
+ * @param {String} event\n\
+ * @param {Mixed} ...\n\
+ * @return {Emitter}\n\
+ */\n\
+\n\
+Emitter.prototype.emit = function(event){\n\
+  this._callbacks = this._callbacks || {};\n\
+  var args = [].slice.call(arguments, 1)\n\
+    , callbacks = this._callbacks[event];\n\
+\n\
+  if (callbacks) {\n\
+    callbacks = callbacks.slice(0);\n\
+    for (var i = 0, len = callbacks.length; i < len; ++i) {\n\
+      callbacks[i].apply(this, args);\n\
+    }\n\
+  }\n\
 \n\
   return this;\n\
 };\n\
 \n\
-//@ sourceURL=component-progress/index.js"
+/**\n\
+ * Return array of callbacks for `event`.\n\
+ *\n\
+ * @param {String} event\n\
+ * @return {Array}\n\
+ * @api public\n\
+ */\n\
+\n\
+Emitter.prototype.listeners = function(event){\n\
+  this._callbacks = this._callbacks || {};\n\
+  return this._callbacks[event] || [];\n\
+};\n\
+\n\
+/**\n\
+ * Check if this emitter has `event` handlers.\n\
+ *\n\
+ * @param {String} event\n\
+ * @return {Boolean}\n\
+ * @api public\n\
+ */\n\
+\n\
+Emitter.prototype.hasListeners = function(event){\n\
+  return !! this.listeners(event).length;\n\
+};\n\
+//@ sourceURL=component-emitter/index.js"
 ));
 require.register("component-css/index.js", Function("exports, require, module",
 "\n\
@@ -1518,11 +1550,35 @@ module.exports = function debounce(func, threshold, execAsap){\n\
 //@ sourceURL=component-debounce/index.js"
 ));
 require.register("time-view/index.js", Function("exports, require, module",
-"var Progress = require('progress');\n\
+"\n\
+/**\n\
+ * Module dependencies.\n\
+ */\n\
+\n\
 var bind = require('bind');\n\
 var css = require('css');\n\
 var debounce = require('debounce');\n\
 var span = require('span');\n\
+var page = require('page');\n\
+var autoscale = require('autoscale-canvas');\n\
+var template = require('./template');\n\
+var domify = require('domify');\n\
+\n\
+/**\n\
+ * Device pixel ratio\n\
+ */\n\
+\n\
+var ratio = window.devicePixelRatio || 1;\n\
+\n\
+/**\n\
+ * Tau.\n\
+ */\n\
+\n\
+var tau = Math.PI * 2;\n\
+\n\
+/**\n\
+ * Expose `Time`.\n\
+ */\n\
 \n\
 module.exports = Time;\n\
 \n\
@@ -1534,16 +1590,47 @@ module.exports = Time;\n\
  */\n\
 \n\
 function Time(time) {\n\
+  var self = this;\n\
   this.time = time;\n\
   this.stopped = false;\n\
-  this.progress = new Progress();\n\
-  this.el = this.progress.el;\n\
-  css(this.el, { display: 'none' });\n\
+  this.ended = false;\n\
+  this.el = domify(template);\n\
+  this.el.style.display = 'none';\n\
+  this.canvas = this.el.querySelector('canvas');\n\
+  this.ctx = this.canvas.getContext('2d');\n\
+  this.copy = this.el.querySelector('.copy');\n\
+  this.copy.onclick = function() {\n\
+    page('/');\n\
+  };\n\
+  this.pulsate();\n\
+  this.update(this.time);\n\
   setTimeout(bind(this, 'place'));\n\
   this._place = bind(this, debounce(this.place, 200));\n\
   window.addEventListener('resize', this._place);\n\
-  this.update(this.time);\n\
 }\n\
+\n\
+/**\n\
+ * Pulsate the text.\n\
+ *\n\
+ * @api private\n\
+ */\n\
+\n\
+Time.prototype.pulsate = function() {\n\
+  var self = this;\n\
+  var i = 0;\n\
+  \n\
+  function pulsate() {\n\
+    if (self.stopped || self.ended) return;\n\
+    setTimeout(pulsate, 500);\n\
+    if (++i % 2) {\n\
+      self.copy.classList.add('high');\n\
+    } else {\n\
+      self.copy.classList.remove('high');\n\
+    }\n\
+  }\n\
+  \n\
+  pulsate();\n\
+};\n\
 \n\
 /**\n\
  * Update time left.\n\
@@ -1553,8 +1640,7 @@ function Time(time) {\n\
  */\n\
 \n\
 Time.prototype.update = function(time) {\n\
-  this.progress.text(span(time + 1000));\n\
-  this.progress.update(time / this.time * 100);\n\
+  this.draw(time / this.time);\n\
 };\n\
 \n\
 /**\n\
@@ -1566,12 +1652,19 @@ Time.prototype.update = function(time) {\n\
 Time.prototype.end = function() {\n\
   var self = this;\n\
   var i = 0;\n\
-  self.progress.text('beep!');\n\
-  (function blink() {\n\
-    if (self.stopped) return;\n\
-    setTimeout(blink, 700);\n\
-    self.progress.update(i++ % 2 ? 0 : 100);\n\
-  })();\n\
+  self.ended = true;\n\
+  self.draw(1);\n\
+  \n\
+  setTimeout(function() {\n\
+    function pulsate() {\n\
+      if (self.stopped) return;\n\
+      setTimeout(pulsate, 1000);\n\
+      self.canvas.style.opacity = ++i % 2 ? 0 : 1;\n\
+    }\n\
+    \n\
+    self.canvas.style.transition = '.8s';\n\
+    setTimeout(pulsate, 500);\n\
+  });\n\
 };\n\
 \n\
 /**\n\
@@ -1594,16 +1687,49 @@ Time.prototype.destroy = function() {\n\
 Time.prototype.place = function() {\n\
   var par = this.el.parentNode;\n\
   var min = Math.min(par.offsetHeight, par.offsetWidth);\n\
-  var size = min * .7;\n\
-  this.progress.size(size);\n\
+  var size = min * .8;\n\
+  this.canvas.width = size;\n\
+  this.canvas.height = size;\n\
+  autoscale(this.canvas);\n\
   css(this.el, {\n\
-    display: 'block',\n\
+    display: 'block'\n\
+  });\n\
+  css(this.canvas, {\n\
     position: 'absolute',\n\
     top: par.offsetHeight / 2 - size / 2,\n\
     left: par.offsetWidth / 2 - size / 2\n\
   });\n\
 };\n\
+\n\
+/**\n\
+ * Draw the circular time indicator.\n\
+ *\n\
+ * @param {Number} factor\n\
+ * @api private\n\
+ */\n\
+\n\
+Time.prototype.draw = function(fac) {\n\
+  var ctx = this.ctx;\n\
+  var size = this.canvas.width / ratio;\n\
+  var half = size / 2; \n\
+  var x = half;\n\
+  var y = half;\n\
+  var rad = half - 1;\n\
+  var angle = tau * fac;\n\
+  \n\
+  ctx.clearRect(0, 0, size, size);\n\
+  ctx.strokeStyle = 'white';\n\
+  ctx.beginPath();\n\
+  ctx.arc(x, y, rad, 0, angle, false);\n\
+  ctx.stroke();\n\
+};\n\
 //@ sourceURL=time-view/index.js"
+));
+require.register("time-view/template.js", Function("exports, require, module",
+"module.exports = '<div class=\"time-view\">\\n\
+  <canvas></canvas>\\n\
+  <span class=\"copy\">alrt.io</span>\\n\
+</div>';//@ sourceURL=time-view/template.js"
 ));
 require.register("timer/index.js", Function("exports, require, module",
 "var bind = require('bind');\n\
@@ -1617,20 +1743,22 @@ var Notifications = window.webkitNotifications\n\
 var TimeView = require('time-view');\n\
 var span = require('span');\n\
 var raf = require('raf');\n\
+var Emitter = require('emitter');\n\
 \n\
 module.exports = Timer;\n\
 \n\
 /**\n\
  * Timer view.\n\
  *\n\
- * @param {String} dur\n\
+ * @param {String} str\n\
  * @return {Timer}\n\
  * @todo Refactor out 'enable notifications' button\n\
  */\n\
  \n\
-function Timer(dur) {\n\
+function Timer(str) {\n\
   var self = this;\n\
-  this.span = span(dur);\n\
+  this.str = str;\n\
+  this.span = span(str);\n\
   this.el = domify(template);\n\
   this.enableNotifications(); \n\
   this.time = new TimeView(this.span);\n\
@@ -1652,6 +1780,8 @@ function Timer(dur) {\n\
     })();\n\
   });\n\
 };\n\
+\n\
+Emitter(Timer.prototype);\n\
 \n\
 /**\n\
  * Abort.\n\
@@ -1682,9 +1812,10 @@ Timer.prototype.update = function(left) {\n\
  */\n\
 \n\
 Timer.prototype.end = function() {\n\
-  notify('Alert', 'Timer finished');\n\
-  beep();\n\
+  //notify('Alert', 'Timer finished: ' + this.str);\n\
+  //beep();\n\
   this.time.end();\n\
+  this.emit('end');\n\
 };\n\
 \n\
 /**\n\
@@ -1750,17 +1881,64 @@ require.register("timer/beep.js", Function("exports, require, module",
  * Beep!\n\
  *\n\
  * @api private\n\
+ * @todo fade in/out\n\
  */\n\
 \n\
 module.exports = function beep() {\n\
   if (!ctx || !ctx.createOscillator) return;\n\
   var osc = ctx.createOscillator();\n\
   osc.connect(ctx.destination);\n\
-  osc.frequency.value = 440;\n\
+  osc.frequency.value = 460;\n\
   osc.start(ctx.currentTime);\n\
-  osc.stop(ctx.currentTime + 1);\n\
+  osc.stop(ctx.currentTime + 0.6);\n\
 };\n\
 //@ sourceURL=timer/beep.js"
+));
+require.register("sequence/index.js", Function("exports, require, module",
+"var Timer = require('timer');\n\
+var bind = require('bind');\n\
+\n\
+module.exports = Sequence;\n\
+\n\
+/**\n\
+ * Sequence.\n\
+ *\n\
+ * @param {String} seq\n\
+ * @return {Sequence}\n\
+ * @api public\n\
+ */\n\
+\n\
+function Sequence(seq) {\n\
+  this.seq = seq.split(',');\n\
+  this.el = document.createElement('div');\n\
+  this.next();\n\
+}\n\
+\n\
+/**\n\
+ * Start next timer in sequence.\n\
+ *\n\
+ * @api private\n\
+ */\n\
+\n\
+Sequence.prototype.next = function() {\n\
+  var dur = this.seq.shift();\n\
+  if (typeof dur == 'undefined') return;\n\
+  if (this.timer) this.timer.abort();\n\
+  this.timer = new Timer(dur);\n\
+  this.el.innerHTML = '';\n\
+  this.el.appendChild(this.timer.el);\n\
+  this.timer.on('end', bind(this, 'next'));\n\
+};\n\
+\n\
+/**\n\
+ * End the sequence.\n\
+ *\n\
+ * @api public\n\
+ */\n\
+\n\
+Sequence.prototype.end = function() {\n\
+  this.timer.abort();\n\
+};//@ sourceURL=sequence/index.js"
 ));
 require.register("home/index.js", Function("exports, require, module",
 "var template = require('./template');\n\
@@ -1789,18 +1967,18 @@ require.register("home/template.js", Function("exports, require, module",
 require.register("boot/index.js", Function("exports, require, module",
 "var page = require('page');\n\
 var Home = require('home');\n\
-var Timer = require('timer');\n\
+var Sequence = require('sequence');\n\
 \n\
 // State\n\
 \n\
-var timer;\n\
+var sequence;\n\
 \n\
 /**\n\
  * Reset.\n\
  */\n\
 \n\
 page(function(ctx, next) {\n\
-  if (timer) timer.abort();\n\
+  if (sequence) sequence.end();\n\
   document.body.innerHTML = '';\n\
   next();\n\
 });\n\
@@ -1809,11 +1987,11 @@ page(function(ctx, next) {\n\
  * Timer page.\n\
  */\n\
 \n\
-page('/:duration', function(ctx) {\n\
-  timer = new Timer(ctx.params.duration);\n\
-  document.body.appendChild(timer.el);\n\
+page('/:sequence', function(ctx) {\n\
+  sequence = new Sequence(ctx.params.sequence);\n\
+  document.body.appendChild(sequence.el);\n\
   analytics.page('Timer', {\n\
-    duration: ctx.params.duration\n\
+    sequence: ctx.params.sequence.split(',')\n\
   });\n\
 });\n\
 \n\
@@ -1867,9 +2045,12 @@ require.alias("boot/index.js", "alrt.io/deps/boot/index.js");
 require.alias("boot/index.js", "boot/index.js");
 require.alias("visionmedia-page.js/index.js", "boot/deps/page/index.js");
 
-require.alias("timer/index.js", "boot/deps/timer/index.js");
-require.alias("timer/template.js", "boot/deps/timer/template.js");
-require.alias("timer/beep.js", "boot/deps/timer/beep.js");
+require.alias("sequence/index.js", "boot/deps/sequence/index.js");
+require.alias("component-bind/index.js", "sequence/deps/bind/index.js");
+
+require.alias("timer/index.js", "sequence/deps/timer/index.js");
+require.alias("timer/template.js", "sequence/deps/timer/template.js");
+require.alias("timer/beep.js", "sequence/deps/timer/beep.js");
 require.alias("component-bind/index.js", "timer/deps/bind/index.js");
 
 require.alias("component-piecon/index.js", "timer/deps/piecon/index.js");
@@ -1897,10 +2078,11 @@ require.alias("component-favicon/index.js", "timer/deps/favicon/index.js");
 
 require.alias("component-raf/index.js", "timer/deps/raf/index.js");
 
-require.alias("time-view/index.js", "timer/deps/time-view/index.js");
-require.alias("component-progress/index.js", "time-view/deps/progress/index.js");
-require.alias("component-autoscale-canvas/index.js", "component-progress/deps/autoscale-canvas/index.js");
+require.alias("component-emitter/index.js", "timer/deps/emitter/index.js");
+require.alias("component-indexof/index.js", "component-emitter/deps/indexof/index.js");
 
+require.alias("time-view/index.js", "timer/deps/time-view/index.js");
+require.alias("time-view/template.js", "timer/deps/time-view/template.js");
 require.alias("component-bind/index.js", "time-view/deps/bind/index.js");
 
 require.alias("component-css/index.js", "time-view/deps/css/index.js");
@@ -1909,6 +2091,12 @@ require.alias("component-debounce/index.js", "time-view/deps/debounce/index.js")
 require.alias("component-debounce/index.js", "time-view/deps/debounce/index.js");
 require.alias("component-debounce/index.js", "component-debounce/index.js");
 require.alias("godmodelabs-span/index.js", "time-view/deps/span/index.js");
+
+require.alias("visionmedia-page.js/index.js", "time-view/deps/page/index.js");
+
+require.alias("component-autoscale-canvas/index.js", "time-view/deps/autoscale-canvas/index.js");
+
+require.alias("component-domify/index.js", "time-view/deps/domify/index.js");
 
 require.alias("home/index.js", "boot/deps/home/index.js");
 require.alias("home/template.js", "boot/deps/home/template.js");
