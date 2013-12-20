@@ -5,6 +5,7 @@
 ### Dependencies
 
 * [node.js](http://nodejs.org), install through the install button
+* [git](http://git-scm.com), install through the download button
 * [watch(1)](https://github.com/visionmedia/watch), which helps building assets in the background
 
 ```bash
