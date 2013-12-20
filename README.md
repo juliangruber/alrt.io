@@ -1,5 +1,7 @@
 
-# alrt
+# alrt.io
+
+[Designer docs](for-designers.md)
 
 ## license
 
