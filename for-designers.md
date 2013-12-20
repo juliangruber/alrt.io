@@ -1,11 +1,11 @@
-
 # For designers
 
 ## Installation
 
-The first dependency is [node.js](http://nodejs.org), install through the install button.
+### Dependencies
 
-The second dependency is [watch(1)](https://github.com/visionmedia/watch), which helps building assets in the background.
+* [node.js](http://nodejs.org), install through the install button
+* [watch(1)](https://github.com/visionmedia/watch), which helps building assets in the background
 
 ```bash
 $ cd /tmp
@@ -14,11 +14,13 @@ $ cd watch
 $ sudo make install
 ```
 
-The third and last dependency is [component(1)](http://component.io), which is the asset builder. Install via
+* [component(1)](http://component.io), which is the asset builder. Install via
 
 ```bash
 $ sudo npm install -g component
 ```
+
+### App
 
 Now it's time to finally install the app. Go to the folder you want to put the app into, and run:
 
