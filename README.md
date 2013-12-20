@@ -1,9 +1,15 @@
-
 # alrt.io
+
+[Launch!](http://alrt.io/)
 
 [Designer docs](for-designers.md)
 
-## license
+## Authors
+
+* Julian Gruber
+* Sven Read
+
+## License
 
 (MIT)
 
