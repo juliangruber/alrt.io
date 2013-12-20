@@ -1,0 +1,77 @@
+@import "bourbon"
+
+$bs: 16px
+
+@include keyframes(pulse)
+	from
+		color: #788A76
+	to
+		color: #3C5555
+
+html, body
+	background: #012033 /* Old browsers */
+	height: 100%
+	padding: 0
+	font-family: Lato
+	font-size: 16px
+	
+.home__jumbotron
+	width: 800px
+	margin: 0 auto
+	h1
+		text-align: center
+		font-size: $bs*1.5
+		color: #fff
+		line-height: $bs*2
+		font-weight: 500
+		font-style: normal
+		color: #3C5555
+		margin: 0
+		padding: 0
+		-webkit-animation: pulse 1s infinite alternate
+		i
+			font-size: $bs*8
+			position: relative
+			color: #fff
+			bottom: -$bs*5
+	
+	h2
+		margin: $bs*5 0 $bs*2
+		font-size: $bs*3
+		line-height: $bs*3
+		color: #B3BE98
+		font-weight: 100
+		text-align: center
+		padding: 0
+		span
+			color: #EEF3B9
+
+.icon
+	color: #fff
+	
+.home__form
+	width: 800px
+	margin: 0 auto
+	text-align: center
+	input
+		width: 300px
+		border: 0
+		background: #fff
+		@include border-top-radius($bs/2)
+		@include border-bottom-radius($bs/2)
+		@include border-left-radius($bs/2)
+		@include border-right-radius($bs/2)
+		font-size: $bs*1.5
+		padding: $bs $bs*2
+		border: $bs/4 #3C5555 solid
+	p
+		padding: 0
+		margin: $bs*1.2 0
+		font-size: $bs
+		color: #3C5555
+		font-weight: 300
+		line-height: $bs*1.4
+		
+		
+		
+		

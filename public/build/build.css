@@ -49,10 +49,102 @@
   background: blue;
   border: 2px solid green;
 }
+@-webkit-keyframes pulse {
+  from {
+    color: #788a76; }
+
+  to {
+    color: #3c5555; } }
+
+@-moz-keyframes pulse {
+  from {
+    color: #788a76; }
+
+  to {
+    color: #3c5555; } }
+
+@-o-keyframes pulse {
+  from {
+    color: #788a76; }
+
+  to {
+    color: #3c5555; } }
+
+@keyframes pulse {
+  from {
+    color: #788a76; }
+
+  to {
+    color: #3c5555; } }
+
+html, body {
+  background: #012033;
+  height: 100%;
+  padding: 0;
+  font-family: Lato;
+  font-size: 16px; }
+
+.home__jumbotron {
+  width: 800px;
+  margin: 0 auto; }
+  .home__jumbotron h1 {
+    text-align: center;
+    font-size: 24px;
+    color: white;
+    line-height: 32px;
+    font-weight: 500;
+    font-style: normal;
+    color: #3c5555;
+    margin: 0;
+    padding: 0;
+    -webkit-animation: pulse 1s infinite alternate; }
+    .home__jumbotron h1 i {
+      font-size: 128px;
+      position: relative;
+      color: white;
+      bottom: -80px; }
+  .home__jumbotron h2 {
+    margin: 80px 0 32px;
+    font-size: 48px;
+    line-height: 48px;
+    color: #b3be98;
+    font-weight: 100;
+    text-align: center;
+    padding: 0; }
+    .home__jumbotron h2 span {
+      color: #eef3b9; }
+
+.icon {
+  color: white; }
+
+.home__form {
+  width: 800px;
+  margin: 0 auto;
+  text-align: center; }
+  .home__form input {
+    width: 300px;
+    border: 0;
+    background: white;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    font-size: 24px;
+    padding: 16px 32px;
+    border: 4px #3c5555 solid; }
+  .home__form p {
+    padding: 0;
+    margin: 19.2px 0;
+    font-size: 16px;
+    color: #3c5555;
+    font-weight: 300;
+    line-height: 22.4px; }
 
 body {
   overflow: hidden;
   margin: 0;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: black;
 }

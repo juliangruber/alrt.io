@@ -1301,23 +1301,8 @@ exports.cancel = function(id){\n\
 };\n\
 //@ sourceURL=component-raf/index.js"
 ));
-require.register("component-indexof/index.js", Function("exports, require, module",
-"module.exports = function(arr, obj){\n\
-  if (arr.indexOf) return arr.indexOf(obj);\n\
-  for (var i = 0; i < arr.length; ++i) {\n\
-    if (arr[i] === obj) return i;\n\
-  }\n\
-  return -1;\n\
-};//@ sourceURL=component-indexof/index.js"
-));
 require.register("component-emitter/index.js", Function("exports, require, module",
 "\n\
-/**\n\
- * Module dependencies.\n\
- */\n\
-\n\
-var index = require('indexof');\n\
-\n\
 /**\n\
  * Expose `Emitter`.\n\
  */\n\
@@ -1385,7 +1370,7 @@ Emitter.prototype.once = function(event, fn){\n\
     fn.apply(this, arguments);\n\
   }\n\
 \n\
-  fn._off = on;\n\
+  on.fn = fn;\n\
   this.on(event, on);\n\
   return this;\n\
 };\n\
@@ -1423,8 +1408,14 @@ Emitter.prototype.removeEventListener = function(event, fn){\n\
   }\n\
 \n\
   // remove specific handler\n\
-  var i = index(callbacks, fn._off || fn);\n\
-  if (~i) callbacks.splice(i, 1);\n\
+  var cb;\n\
+  for (var i = 0; i < callbacks.length; i++) {\n\
+    cb = callbacks[i];\n\
+    if (cb === fn || cb.fn === fn) {\n\
+      callbacks.splice(i, 1);\n\
+      break;\n\
+    }\n\
+  }\n\
   return this;\n\
 };\n\
 \n\
@@ -1732,7 +1723,12 @@ require.register("time-view/template.js", Function("exports, require, module",
 </div>';//@ sourceURL=time-view/template.js"
 ));
 require.register("timer/index.js", Function("exports, require, module",
-"var bind = require('bind');\n\
+"\n\
+/**\n\
+ * Module dependencies.\n\
+ */\n\
+\n\
+var bind = require('bind');\n\
 var template = require('./template');\n\
 var domify = require('domify');\n\
 var text = require('text');\n\
@@ -1744,6 +1740,16 @@ var TimeView = require('time-view');\n\
 var span = require('span');\n\
 var raf = require('raf');\n\
 var Emitter = require('emitter');\n\
+\n\
+/**\n\
+ * Silent switch for development.\n\
+ */\n\
+\n\
+var silent = false;\n\
+\n\
+/**\n\
+ * Expose `Timer`.\n\
+ */\n\
 \n\
 module.exports = Timer;\n\
 \n\
@@ -1781,6 +1787,10 @@ function Timer(str) {\n\
   });\n\
 };\n\
 \n\
+/**\n\
+ * Mixin Emitter.\n\
+ */\n\
+\n\
 Emitter(Timer.prototype);\n\
 \n\
 /**\n\
@@ -1812,8 +1822,10 @@ Timer.prototype.update = function(left) {\n\
  */\n\
 \n\
 Timer.prototype.end = function() {\n\
-  //notify('Alert', 'Timer finished: ' + this.str);\n\
-  //beep();\n\
+  if (!silent) {\n\
+    notify('Alert', 'Timer finished: ' + this.str);\n\
+    beep();\n\
+  }\n\
   this.time.end();\n\
   this.emit('end');\n\
 };\n\
@@ -1895,8 +1907,17 @@ module.exports = function beep() {\n\
 //@ sourceURL=timer/beep.js"
 ));
 require.register("sequence/index.js", Function("exports, require, module",
-"var Timer = require('timer');\n\
+"\n\
+/**\n\
+ * Module dependencies.\n\
+ */\n\
+\n\
+var Timer = require('timer');\n\
 var bind = require('bind');\n\
+\n\
+/**\n\
+ * Expose `Sequence`.\n\
+ */\n\
 \n\
 module.exports = Sequence;\n\
 \n\
@@ -1938,12 +1959,25 @@ Sequence.prototype.next = function() {\n\
 \n\
 Sequence.prototype.end = function() {\n\
   this.timer.abort();\n\
-};//@ sourceURL=sequence/index.js"
+};\n\
+//@ sourceURL=sequence/index.js"
 ));
 require.register("home/index.js", Function("exports, require, module",
-"var template = require('./template');\n\
+"\n\
+/**\n\
+ * Module dependencies.\n\
+ */\n\
+\n\
+var template = require('./template');\n\
 var domify = require('domify');\n\
 var page = require('page');\n\
+\n\
+/**\n\
+ * Home view.\n\
+ *\n\
+ * @return {Element}\n\
+ * @api public\n\
+ */\n\
 \n\
 module.exports = function() {\n\
   var el = domify(template);\n\
@@ -1960,16 +1994,30 @@ module.exports = function() {\n\
 //@ sourceURL=home/index.js"
 ));
 require.register("home/template.js", Function("exports, require, module",
-"module.exports = '<div id=\"home\">\\n\
-  <form><input type=\"text\"></form>\\n\
+"module.exports = '<div id=\"home\" class=\"home\">\\n\
+    <div class=\"home__jumbotron\">\\n\
+        <h1><i class=\"icon ion-ios7-reload\"></i><br>alrt</h1>\\n\
+        <h2><span>A timer.</span><br>No nonsense, fast <span>&</span> clean.<br>Just how it should be.</h2>\\n\
+    </div>\\n\
+    <div class=\"home__form\">\\n\
+        <form><input type=\"text\" placeholder=\"2m 15s\"></form>\\n\
+        <p>Just enter the timer duration you want & hit enter. <br><b>Examples</b>: 1h (you will get one hour), 10m (is 10 minutes) <br>or: 50s (is 50 seconds).</p>\\n\
+    </div>\\n\
 </div>';//@ sourceURL=home/template.js"
 ));
 require.register("boot/index.js", Function("exports, require, module",
-"var page = require('page');\n\
+"\n\
+/**\n\
+ * Module dependencies.\n\
+ */\n\
+\n\
+var page = require('page');\n\
 var Home = require('home');\n\
 var Sequence = require('sequence');\n\
 \n\
-// State\n\
+/**\n\
+ * Keep sequence to clean up\n\
+ */\n\
 \n\
 var sequence;\n\
 \n\
@@ -2079,7 +2127,6 @@ require.alias("component-favicon/index.js", "timer/deps/favicon/index.js");
 require.alias("component-raf/index.js", "timer/deps/raf/index.js");
 
 require.alias("component-emitter/index.js", "timer/deps/emitter/index.js");
-require.alias("component-indexof/index.js", "component-emitter/deps/indexof/index.js");
 
 require.alias("time-view/index.js", "timer/deps/time-view/index.js");
 require.alias("time-view/template.js", "timer/deps/time-view/template.js");
