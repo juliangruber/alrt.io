@@ -1702,14 +1702,14 @@ Time.prototype.place = function() {\n\
 Time.prototype.draw = function(fac) {\n\
   var ctx = this.ctx;\n\
   var size = this.canvas.width / ratio;\n\
-  var half = size / 2; \n\
+  var half = size / 2;\n\
   var x = half;\n\
   var y = half;\n\
   var rad = half - 1;\n\
   var angle = tau * fac;\n\
   \n\
   ctx.clearRect(0, 0, size, size);\n\
-  ctx.strokeStyle = 'white';\n\
+  ctx.strokeStyle = '#EEF3B9';\n\
   ctx.beginPath();\n\
   ctx.arc(x, y, rad, 0, angle, false);\n\
   ctx.stroke();\n\
@@ -1720,6 +1720,7 @@ require.register("time-view/template.js", Function("exports, require, module",
 "module.exports = '<div class=\"time-view\">\\n\
   <canvas></canvas>\\n\
   <span class=\"copy\">alrt.io</span>\\n\
+  <span class=\"timer-count\">00:01:53</span>\\n\
 </div>';//@ sourceURL=time-view/template.js"
 ));
 require.register("timer/index.js", Function("exports, require, module",
@@ -1883,7 +1884,8 @@ function enableNotifications(fn) {\n\
 ));
 require.register("timer/template.js", Function("exports, require, module",
 "module.exports = '<div class=\"timer\">\\n\
-  <button>Enable notifications</button>\\n\
+    <a href=\"/\" class=\"back\">Return zu Input</a>\\n\
+  <button class=\"enable\">Enable notifications</button>\\n\
 </div>';//@ sourceURL=timer/template.js"
 ));
 require.register("timer/beep.js", Function("exports, require, module",

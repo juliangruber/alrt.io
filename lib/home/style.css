@@ -1,27 +1,27 @@
 @-webkit-keyframes pulse {
   from {
-    color: #788a76; }
+    color: #eef3b9; }
 
   to {
     color: #3c5555; } }
 
 @-moz-keyframes pulse {
   from {
-    color: #788a76; }
+    color: #eef3b9; }
 
   to {
     color: #3c5555; } }
 
 @-o-keyframes pulse {
   from {
-    color: #788a76; }
+    color: #eef3b9; }
 
   to {
     color: #3c5555; } }
 
 @keyframes pulse {
   from {
-    color: #788a76; }
+    color: #eef3b9; }
 
   to {
     color: #3c5555; } }
@@ -46,17 +46,17 @@ html, body {
     color: #3c5555;
     margin: 0;
     padding: 0;
-    -webkit-animation: pulse 1s infinite alternate; }
+    -webkit-animation: pulse 2s infinite alternate; }
     .home__jumbotron h1 i {
       font-size: 128px;
       position: relative;
       color: white;
       bottom: -80px; }
   .home__jumbotron h2 {
-    margin: 80px 0 32px;
+    margin: 96px 0 80px;
     font-size: 48px;
     line-height: 48px;
-    color: #b3be98;
+    color: #788a76;
     font-weight: 100;
     text-align: center;
     padding: 0; }

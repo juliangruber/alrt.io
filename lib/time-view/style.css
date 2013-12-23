@@ -1,17 +1,89 @@
-.copy {
-  color: #aaa;
-  font-family: "HelveticaNeue-UltraLight";
+@-webkit-keyframes pulse {
+  from {
+    color: #eef3b9; }
+
+  to {
+    color: #3c5555; } }
+
+@-moz-keyframes pulse {
+  from {
+    color: #eef3b9; }
+
+  to {
+    color: #3c5555; } }
+
+@-o-keyframes pulse {
+  from {
+    color: #eef3b9; }
+
+  to {
+    color: #3c5555; } }
+
+@keyframes pulse {
+  from {
+    color: #eef3b9; }
+
+  to {
+    color: #3c5555; } }
+
+html, body {
+  background: #012033;
+  height: 100%;
+  padding: 0;
+  font-family: Lato;
+  font-size: 16px; }
+
+.timer-count {
   position: absolute;
   width: 100%;
   top: 50%;
-  margin-top: -1ex;
+  font-size: 64px;
+  text-align: center;
+  color: #3c5555; }
+
+.copy {
+  color: #aaaaaa;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  margin-top: -32px;
   font-size: 100%;
   text-align: center;
-  transition: .5s;
+  -webkit-animation: pulse 1s infinite alternate;
   cursor: pointer;
-  z-index: 1;
-}
+  z-index: 1; }
 
-.copy.high {
-  color: white;
-}
+.back {
+  position: absolute;
+  top: 16px;
+  left: 0;
+  background-color: #3c5555;
+  color: #eef3b9;
+  display: block;
+  width: auto;
+  padding: 8px 16px;
+  text-decoration: none;
+  font-weight: 300;
+  opacity: 0.5;
+  font-size: 16px;
+  transition: all 0.5s; }
+  .back:hover {
+    opacity: 1; }
+
+.enable {
+  position: absolute;
+  top: 16px;
+  right: 0;
+  background-color: #3c5555;
+  color: #eef3b9;
+  display: block;
+  width: auto;
+  padding: 8px 16px;
+  text-decoration: none;
+  font-weight: 300;
+  font-size: 16px;
+  border: 0;
+  transition: all 0.5s; }
+  .enable:hover {
+    background-color: #eef3b9;
+    color: #3c5555; }

@@ -1,0 +1,53 @@
+@-webkit-keyframes pulse {
+  from {
+    color: #eef3b9; }
+
+  to {
+    color: #3c5555; } }
+
+@-moz-keyframes pulse {
+  from {
+    color: #eef3b9; }
+
+  to {
+    color: #3c5555; } }
+
+@-o-keyframes pulse {
+  from {
+    color: #eef3b9; }
+
+  to {
+    color: #3c5555; } }
+
+@keyframes pulse {
+  from {
+    color: #eef3b9; }
+
+  to {
+    color: #3c5555; } }
+
+html, body {
+  background: #012033;
+  height: 100%;
+  padding: 0;
+  font-family: Lato;
+  font-size: 16px; }
+
+.timer {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  font-size: 64px;
+  text-align: center; }
+
+.copy {
+  color: #aaaaaa;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  margin-top: -1ex;
+  font-size: 100%;
+  text-align: center;
+  -webkit-animation: pulse 2s infinite alternate;
+  cursor: pointer;
+  z-index: 1; }

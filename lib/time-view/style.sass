@@ -1,0 +1,71 @@
+@import "bourbon"
+
+$bs: 16px
+
+@include keyframes(pulse)
+	from
+		color: #EEF3B9
+	to
+		color: #3C5555
+
+html, body
+	background: #012033 /* Old browsers */
+	height: 100%
+	padding: 0
+	font-family: Lato
+	font-size: 16px
+	
+.timer-count
+	position: absolute
+	width: 100%
+	top: 50%
+	font-size: $bs*4
+	text-align: center
+	color: #3C5555
+
+.copy
+	color: #aaa
+	position: absolute
+	width: 100%
+	top: 50%
+	margin-top: -$bs*2
+	font-size: 100%
+	text-align: center
+	-webkit-animation: pulse 1s infinite alternate
+	cursor: pointer
+	z-index: 1
+
+.back
+	position: absolute
+	top: $bs
+	left: 0
+	background-color: #3C5555
+	color: #EEF3B9
+	display: block
+	width: auto
+	padding: $bs/2 $bs
+	text-decoration: none
+	font-weight: 300
+	opacity: 0.5
+	font-size: $bs
+	transition: all 0.5s
+	&:hover
+		opacity: 1
+
+.enable
+	position: absolute
+	top: $bs
+	right: 0
+	background-color: #3C5555
+	color: #EEF3B9
+	display: block
+	width: auto
+	padding: $bs/2 $bs
+	text-decoration: none
+	font-weight: 300
+	font-size: $bs
+	border: 0
+	transition: all 0.5s
+	&:hover
+		background-color: #EEF3B9
+		color: #3C5555
