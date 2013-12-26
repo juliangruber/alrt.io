@@ -1593,6 +1593,7 @@ function Time(time) {\n\
   this.copy.onclick = function() {\n\
     page('/');\n\
   };\n\
+  this.count = this.el.querySelector('.timer-count');\n\
   this.pulsate();\n\
   this.update(this.time);\n\
   setTimeout(bind(this, 'place'));\n\
@@ -1631,6 +1632,7 @@ Time.prototype.pulsate = function() {\n\
  */\n\
 \n\
 Time.prototype.update = function(time) {\n\
+  this.count.innerHTML = span(time + 1000);\n\
   this.draw(time / this.time);\n\
 };\n\
 \n\
@@ -1644,6 +1646,7 @@ Time.prototype.end = function() {\n\
   var self = this;\n\
   var i = 0;\n\
   self.ended = true;\n\
+  self.count.innerHTML = '';\n\
   self.draw(1);\n\
   \n\
   setTimeout(function() {\n\
@@ -1884,9 +1887,10 @@ function enableNotifications(fn) {\n\
 ));
 require.register("timer/template.js", Function("exports, require, module",
 "module.exports = '<div class=\"timer\">\\n\
-    <a href=\"/\" class=\"back\">Return zu Input</a>\\n\
+  <a href=\"/\" class=\"back\">Return to input</a>\\n\
   <button class=\"enable\">Enable notifications</button>\\n\
-</div>';//@ sourceURL=timer/template.js"
+</div>\\n\
+';//@ sourceURL=timer/template.js"
 ));
 require.register("timer/beep.js", Function("exports, require, module",
 "var ctx = require('audio-context');\n\
