@@ -9,7 +9,8 @@
     "godmodelabs/span": "*",
     "component/favicon": "*",
     "component/raf": "*",
-    "component/emitter": "*"
+    "component/emitter": "*",
+    "juliangruber/visible": "*"
   },
   "scripts": ["index.js", "template.js", "beep.js"],
   "styles": ["style.css"],
