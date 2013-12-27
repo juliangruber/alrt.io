@@ -1468,6 +1468,166 @@ Emitter.prototype.hasListeners = function(event){\n\
 };\n\
 //@ sourceURL=component-emitter/index.js"
 ));
+require.register("yields-visibility/index.js", Function("exports, require, module",
+"/**\n\
+ * document.\n\
+ */\n\
+\n\
+var doc = document;\n\
+\n\
+/**\n\
+ * Execute the provided `fn`\n\
+ * when the page visibility changes.\n\
+ *\n\
+ * if a function is not provided an\n\
+ * api will be returned of 3 methods\n\
+ * that each accept a callback that will\n\
+ * be invoked.\n\
+ *\n\
+ * example:\n\
+ *\n\
+ *          // option a\n\
+ *          visiblity(function (e, state) {\n\
+ *            if ('prerender' == state) dostuff();\n\
+ *          });\n\
+ *\n\
+ *          // option b\n\
+ *          visiblity()\n\
+ *            .prerender(function (e) {})\n\
+ *            .visible(function (e) {})\n\
+ *            .hidden(function (e) {});\n\
+ *\n\
+ * @param {Function} fn optional\n\
+ * @return {Object} api\n\
+ */\n\
+\n\
+exports = module.exports = function (fn) {\n\
+  var vendors = ['ms', 'moz', 'webkit']\n\
+    , event = 'visibilitychange'\n\
+    , state = 'VisibilityState'\n\
+    , len = vendors.length\n\
+    , curr;\n\
+\n\
+  // not supported.\n\
+  if (!doc.addEventListener) return exports;\n\
+\n\
+  // capture prefix.\n\
+  while (curr = vendors[--len]) {\n\
+    if (doc[curr + state]) {\n\
+      event = curr + event;\n\
+      state = curr + state;\n\
+      break;\n\
+    }\n\
+  }\n\
+\n\
+  // attach handle.\n\
+  doc.addEventListener(event, function (e) {\n\
+    var cb = fn;\n\
+\n\
+    // delegate\n\
+    if (cb) return cb(e, doc[state]);\n\
+\n\
+    // fn\n\
+    switch (doc[state]) {\n\
+      case 'prerender':\n\
+        cb = exports._prerender;\n\
+        break;\n\
+      case 'visible':\n\
+        cb = exports._visible;\n\
+        break;\n\
+      case 'hidden':\n\
+        cb = exports._hidden;\n\
+        break;\n\
+    }\n\
+\n\
+    cb && cb(e);\n\
+  }, false);\n\
+\n\
+  // api\n\
+  return exports;\n\
+};\n\
+\n\
+/**\n\
+ * Set prerender callback.\n\
+ *\n\
+ * example:\n\
+ *\n\
+ *      visibility()\n\
+ *         .prerender(function (e) {});\n\
+ *\n\
+ * @param {Function} fn\n\
+ * @return {visibility}\n\
+ */\n\
+\n\
+exports.prerender = function (fn) {\n\
+  exports._prerender = fn;\n\
+  return exports;\n\
+};\n\
+\n\
+/**\n\
+ * Set visible callback.\n\
+ *\n\
+ * example:\n\
+ *\n\
+ *      visibility()\n\
+ *        .visible(function (e) {});\n\
+ *\n\
+ * @param {Function} fn\n\
+ * @return {visibility}\n\
+ */\n\
+\n\
+exports.visible = function (fn) {\n\
+  exports._visible = fn;\n\
+  return exports;\n\
+};\n\
+\n\
+/**\n\
+ * Set hidden callback.\n\
+ *\n\
+ * example:\n\
+ *\n\
+ *      visibility()\n\
+ *        .hidden(function (e) {});\n\
+ *\n\
+ * @param {Function} fn\n\
+ * @return {visibility}\n\
+ */\n\
+\n\
+exports.hidden = function (fn) {\n\
+  exports._hidden = fn;\n\
+  return exports;\n\
+};\n\
+//@ sourceURL=yields-visibility/index.js"
+));
+require.register("juliangruber-visible/index.js", Function("exports, require, module",
+"\n\
+/**\n\
+ * Module dependencies.\n\
+ */\n\
+\n\
+var visibility = require('visibility')\n\
+\n\
+/**\n\
+ * Listen for events.\n\
+ */\n\
+\n\
+var visible = true;\n\
+\n\
+visibility(function(e, state) {\n\
+  visible = state != 'hidden';\n\
+});\n\
+\n\
+/**\n\
+ * Check for visibility.\n\
+ *\n\
+ * @return {Boolean}\n\
+ * @api public\n\
+ */\n\
+\n\
+module.exports = function(){\n\
+  return visible;\n\
+};//@ sourceURL=juliangruber-visible/index.js"
+));
 require.register("component-css/index.js", Function("exports, require, module",
 "\n\
 /**\n\
@@ -1744,6 +1904,8 @@ var TimeView = require('time-view');\n\
 var span = require('span');\n\
 var raf = require('raf');\n\
 var Emitter = require('emitter');\n\
+var Piecon = require('piecon');\n\
+var visible = require('visible');\n\
 \n\
 /**\n\
  * Silent switch for development.\n\
@@ -1775,6 +1937,7 @@ function Timer(str) {\n\
   this.el.appendChild(this.time.el);\n\
   this.stopped = false;\n\
   this.start = Date.now();\n\
+  this.piecon = new Piecon;\n\
   \n\
   setTimeout(function() {\n\
     self.start = Date.now();\n\
@@ -1817,6 +1980,7 @@ Timer.prototype.abort = function() {\n\
 \n\
 Timer.prototype.update = function(left) {\n\
   this.time.update(left);\n\
+  if (Math.random() <= 0.1) this.piecon.update(this.span / left);\n\
 };\n\
 \n\
 /**\n\
@@ -1826,10 +1990,8 @@ Timer.prototype.update = function(left) {\n\
  */\n\
 \n\
 Timer.prototype.end = function() {\n\
-  if (!silent) {\n\
-    notify('Alert', 'Timer finished: ' + this.str);\n\
-    beep();\n\
-  }\n\
+  if (!silent) beep();\n\
+  if (!visible()) notify('Alert', 'Timer finished: ' + this.str);\n\
   this.time.end();\n\
   this.emit('end');\n\
 };\n\
@@ -2006,7 +2168,7 @@ require.register("home/template.js", Function("exports, require, module",
         <h2><span>A timer.</span><br>No nonsense, fast <span>&</span> clean.<br>Just how it should be.</h2>\\n\
     </div>\\n\
     <div class=\"home__form\">\\n\
-        <form><input type=\"text\" placeholder=\"2m 15s\"></form>\\n\
+        <form><input type=\"text\" placeholder=\"2m 15s\" name=\"time\"></form>\\n\
         <p>Just enter the timer duration you want & hit enter. <br><b>Examples</b>: 1h (you will get one hour), 10m (is 10 minutes) <br>or: 50s (is 50 seconds).</p>\\n\
     </div>\\n\
 </div>';//@ sourceURL=home/template.js"
@@ -2095,6 +2257,8 @@ page();\n\
 
 
 
+
+
 require.alias("boot/index.js", "alrt.io/deps/boot/index.js");
 require.alias("boot/index.js", "boot/index.js");
 require.alias("visionmedia-page.js/index.js", "boot/deps/page/index.js");
@@ -2134,6 +2298,11 @@ require.alias("component-raf/index.js", "timer/deps/raf/index.js");
 
 require.alias("component-emitter/index.js", "timer/deps/emitter/index.js");
 
+require.alias("juliangruber-visible/index.js", "timer/deps/visible/index.js");
+require.alias("juliangruber-visible/index.js", "timer/deps/visible/index.js");
+require.alias("yields-visibility/index.js", "juliangruber-visible/deps/visibility/index.js");
+
+require.alias("juliangruber-visible/index.js", "juliangruber-visible/index.js");
 require.alias("time-view/index.js", "timer/deps/time-view/index.js");
 require.alias("time-view/template.js", "timer/deps/time-view/template.js");
 require.alias("component-bind/index.js", "time-view/deps/bind/index.js");
