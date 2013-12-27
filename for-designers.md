@@ -57,7 +57,7 @@ $ npm start
 
 ## Disabling annoying stuff
 
-During development the beep sounds and notification can become quite annoying. To disable them, make this flag true: https://github.com/juliangruber/alrt.io/blob/master/lib/timer/index.js#L23. **Don't forget to set to false before committing!**
+During development the beep sounds can become quite annoying. To disable them, make this flag true: https://github.com/juliangruber/alrt.io/blob/master/lib/timer/index.js#L23. **Don't forget to set to false before committing!**
 
 ## Fin
 
