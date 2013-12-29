@@ -2167,7 +2167,7 @@ require.register("home/template.js", Function("exports, require, module",
     <div class=\"home__form\">\\n\
         <form><input type=\"text\" placeholder=\"2m 15s\" name=\"time\"></form>\\n\
         <p>Just enter the timer duration you want & hit enter. <br><b>Examples</b>: 1h (you will get one hour), 10m (is 10 minutes) <br>or: 50s (is 50 seconds).</p>\\n\
-        <p>Or simple type your durcation into the URL, like this: <a href=\"/1h3s\">http://alrt.io/1h3s</a><br>\\n\
+        <p>Or simply type your duration into the URL, like this: <a href=\"/1h3s\">http://alrt.io/1h3s</a><br>\\n\
             <b>Examples</b>: <a href=\"/1h3s\">1 hour & 3 seconds</a> or <a href=\"/2minutes50seconds\">2 minutes & 50 seconds</a>\\n\
         </p>\\n\
     </div>\\n\
