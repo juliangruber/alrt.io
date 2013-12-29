@@ -53,7 +53,7 @@ html, body {
       color: white;
       bottom: -80px; }
   .home__jumbotron h2 {
-    margin: 96px 0 80px;
+    margin: 64px 0 48px;
     font-size: 48px;
     line-height: 48px;
     color: #788a76;
@@ -95,3 +95,7 @@ html, body {
     .home__form p b {
       font-weight: 300;
       color: #788a76; }
+    .home__form p a {
+      color: #3c5555; }
+      .home__form p a:hover {
+        color: #788a76; }

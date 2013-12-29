@@ -22,33 +22,33 @@
 
 
 
-@-webkit-keyframes pulse {
+@-webkit-keyframes pulse2 {
   from {
     color: #eef3b9; }
 
   to {
-    color: #3c5555; } }
+    color: #788a76; } }
 
-@-moz-keyframes pulse {
+@-moz-keyframes pulse2 {
   from {
     color: #eef3b9; }
 
   to {
-    color: #3c5555; } }
+    color: #788a76; } }
 
-@-o-keyframes pulse {
+@-o-keyframes pulse2 {
   from {
     color: #eef3b9; }
 
   to {
-    color: #3c5555; } }
+    color: #788a76; } }
 
-@keyframes pulse {
+@keyframes pulse2 {
   from {
     color: #eef3b9; }
 
   to {
-    color: #3c5555; } }
+    color: #788a76; } }
 
 html, body {
   background: #012033;
@@ -63,19 +63,25 @@ html, body {
   top: 50%;
   font-size: 64px;
   text-align: center;
-  color: #3c5555; }
+  color: #788a76;
+  font-weight: 100;
+  margin-top: -48px; }
 
 .copy {
-  color: #aaaaaa;
+  color: #3c5555;
   position: absolute;
   width: 100%;
   top: 50%;
-  margin-top: -32px;
+  margin-top: 32px;
   font-size: 100%;
   text-align: center;
-  -webkit-animation: pulse 1s infinite alternate;
   cursor: pointer;
-  z-index: 1; }
+  z-index: 1;
+  font-weight: 500; }
+  .copy a {
+    color: #3c5555; }
+    .copy a:hover {
+      color: #788a76; }
 
 .back {
   position: absolute;
@@ -85,12 +91,30 @@ html, body {
   color: #eef3b9;
   display: block;
   width: auto;
-  padding: 8px 16px;
+  padding: 2px 4px 2px 16px;
   text-decoration: none;
-  font-weight: 300;
-  opacity: 0.5;
-  font-size: 16px;
+  font-weight: 500;
+  opacity: 0.25;
+  font-size: 12px;
   transition: all 0.5s; }
+  .back input {
+    width: 100px;
+    border: 0;
+    background: #012033;
+    color: #788a76;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    font-size: 12px;
+    padding: 2px 8px;
+    border: 4px #3c5555 solid;
+    margin-left: 8px;
+    outline: none; }
   .back:hover {
     opacity: 1; }
 
@@ -105,12 +129,14 @@ html, body {
   padding: 8px 16px;
   text-decoration: none;
   font-weight: 300;
-  font-size: 16px;
+  font-size: 12px;
   border: 0;
-  transition: all 0.5s; }
+  transition: all 0.5s;
+  opacity: 0.25; }
   .enable:hover {
     background-color: #eef3b9;
-    color: #3c5555; }
+    color: #3c5555;
+    opacity: 1; }
 
 .timer {
   width: 100%;
@@ -178,7 +204,7 @@ html, body {
       color: white;
       bottom: -80px; }
   .home__jumbotron h2 {
-    margin: 96px 0 80px;
+    margin: 64px 0 48px;
     font-size: 48px;
     line-height: 48px;
     color: #788a76;
@@ -220,6 +246,10 @@ html, body {
     .home__form p b {
       font-weight: 300;
       color: #788a76; }
+    .home__form p a {
+      color: #3c5555; }
+      .home__form p a:hover {
+        color: #788a76; }
 
 @font-face {
      font-family: 'Lato';

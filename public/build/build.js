@@ -1882,7 +1882,7 @@ Time.prototype.draw = function(fac) {\n\
 require.register("time-view/template.js", Function("exports, require, module",
 "module.exports = '<div class=\"time-view\">\\n\
   <canvas></canvas>\\n\
-  <span class=\"copy\">alrt.io</span>\\n\
+  <span class=\"copy\">back to <a href=\"/\">alrt.io</a></span>\\n\
   <span class=\"timer-count\">00:01:53</span>\\n\
 </div>';//@ sourceURL=time-view/template.js"
 ));
@@ -1904,7 +1904,6 @@ var TimeView = require('time-view');\n\
 var span = require('span');\n\
 var raf = require('raf');\n\
 var Emitter = require('emitter');\n\
-var Piecon = require('piecon');\n\
 var visible = require('visible');\n\
 \n\
 /**\n\
@@ -1937,7 +1936,6 @@ function Timer(str) {\n\
   this.el.appendChild(this.time.el);\n\
   this.stopped = false;\n\
   this.start = Date.now();\n\
-  this.piecon = new Piecon;\n\
   \n\
   setTimeout(function() {\n\
     self.start = Date.now();\n\
@@ -1980,7 +1978,6 @@ Timer.prototype.abort = function() {\n\
 \n\
 Timer.prototype.update = function(left) {\n\
   this.time.update(left);\n\
-  if (Math.random() <= 0.1) this.piecon.update(this.span / left);\n\
 };\n\
 \n\
 /**\n\
@@ -2049,7 +2046,7 @@ function enableNotifications(fn) {\n\
 ));
 require.register("timer/template.js", Function("exports, require, module",
 "module.exports = '<div class=\"timer\">\\n\
-  <a href=\"/\" class=\"back\">Return to input</a>\\n\
+  <div class=\"back\"><form>New Alert?<input type=\"text\" placeholder=\"2m 15s\" name=\"time\"></form></div>\\n\
   <button class=\"enable\">Enable notifications</button>\\n\
 </div>\\n\
 ';//@ sourceURL=timer/template.js"
@@ -2170,6 +2167,9 @@ require.register("home/template.js", Function("exports, require, module",
     <div class=\"home__form\">\\n\
         <form><input type=\"text\" placeholder=\"2m 15s\" name=\"time\"></form>\\n\
         <p>Just enter the timer duration you want & hit enter. <br><b>Examples</b>: 1h (you will get one hour), 10m (is 10 minutes) <br>or: 50s (is 50 seconds).</p>\\n\
+        <p>Or simple type your durcation into the URL, like this: <a href=\"/1h3s\">http://alrt.io/1h3s</a><br>\\n\
+            <b>Examples</b>: <a href=\"/1h3s\">1 hour & 3 seconds</a> or <a href=\"/2minutes50seconds\">2 minutes & 50 seconds</a>\\n\
+        </p>\\n\
     </div>\\n\
 </div>';//@ sourceURL=home/template.js"
 ));

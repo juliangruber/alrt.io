@@ -2,11 +2,11 @@
 
 $bs: 16px
 
-@include keyframes(pulse)
+@include keyframes(pulse2)
 	from
 		color: #EEF3B9
 	to
-		color: #3C5555
+		color: #788A76
 
 html, body
 	background: #012033 /* Old browsers */
@@ -21,19 +21,25 @@ html, body
 	top: 50%
 	font-size: $bs*4
 	text-align: center
-	color: #3C5555
+	color: #788A76
+	font-weight: 100
+	margin-top: -$bs*3
 
 .copy
-	color: #aaa
+	color: #3C5555
 	position: absolute
 	width: 100%
 	top: 50%
-	margin-top: -$bs*2
+	margin-top: $bs*2
 	font-size: 100%
 	text-align: center
-	-webkit-animation: pulse 1s infinite alternate
 	cursor: pointer
 	z-index: 1
+	font-weight: 500
+	a
+		color: #3C5555
+		&:hover
+			color: #788A76
 
 .back
 	position: absolute
@@ -43,12 +49,26 @@ html, body
 	color: #EEF3B9
 	display: block
 	width: auto
-	padding: $bs/2 $bs
+	padding: $bs/8 $bs/4 $bs/8 $bs
 	text-decoration: none
-	font-weight: 300
-	opacity: 0.5
-	font-size: $bs
+	font-weight: 500
+	opacity: 0.25
+	font-size: $bs/4*3
 	transition: all 0.5s
+	input
+		width: 100px
+		border: 0
+		background: #012033
+		color: #788A76
+		@include border-top-radius($bs/2)
+		@include border-bottom-radius($bs/2)
+		@include border-left-radius($bs/2)
+		@include border-right-radius($bs/2)
+		font-size: $bs/4*3
+		padding: $bs/8 $bs/2
+		border: $bs/4 #3C5555 solid
+		margin-left: $bs/2
+		outline: none
 	&:hover
 		opacity: 1
 
@@ -63,9 +83,11 @@ html, body
 	padding: $bs/2 $bs
 	text-decoration: none
 	font-weight: 300
-	font-size: $bs
+	font-size: $bs/4*3
 	border: 0
 	transition: all 0.5s
+	opacity: 0.25
 	&:hover
 		background-color: #EEF3B9
 		color: #3C5555
+		opacity: 1
