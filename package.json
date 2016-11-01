@@ -9,6 +9,6 @@
     "alrt.io": "bin/alrt.io.js"
   },
   "dependencies": {
-    "ecstatic": "~0.4.13"
+    "ecstatic": "~2.1.0"
   }
 }
